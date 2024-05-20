@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import Search from './routes/Search';
+import Home from './routes/Home';
+import Market from './routes/Market';
+import Login from './routes/Login';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/search" element={<Search />} />
+        <Route path="/market" element={<Market />} />
+        <Route path="/home" element={<Home />} />
+        {/* 로그인 페이지로 수정 필요 */}
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 
