@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+// 
+
+import React, { useState, useEffect } from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { addressState, locationBtnState } from "./atoms";
 
 import styled from "styled-components";
@@ -41,7 +43,7 @@ const Input = styled(motion.input)`
   text-align: left;
   width: 100%;
   height: 100%;
-  font-size: 16px;
+  font-size: 17px;
   border: none;
   background-color: whitesmoke;
   &:focus {
@@ -50,7 +52,7 @@ const Input = styled(motion.input)`
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  margin-right: 10px;
+  margin: 0px 20px 0px 10px ;
 `;
 
 const Btn = styled.button`
@@ -67,14 +69,14 @@ const Btn = styled.button`
 
 function SearchBox() {
   const address = useRecoilValue(addressState);
-  const locationBtnStateValue = useRecoilValue(locationBtnState);
-  const [placeholderText, setPlaceholderText] = useState("");
+  const [locationBtnStateValue, setLocationBtnStateValue] = useRecoilState(locationBtnState);
+  const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
 
   useEffect(() => {
-    if (locationBtnStateValue) {
-      setPlaceholderText("장소·주소 검색");
-    } else {
+    if (locationBtnStateValue === true) {
       setPlaceholderText(`${address.region2} ${address.region3}`);
+    } else {
+      setPlaceholderText("장소·주소 검색");
     }
   }, [locationBtnStateValue, address]);
 
@@ -89,10 +91,9 @@ function SearchBox() {
         <AnimatePresence>
           <Input
             type="text"
-            value={placeholderText}
             onChange={handleChange}
             placeholder={placeholderText}
-            key={locationBtnStateValue ? "search" : "address"}
+            key={locationBtnStateValue ? "address" : "search"}
             initial={{ opacity: 0 }} // 초기 상태 설정
             animate={{ opacity: 1 }} // 애니메이션 적용
             transition={{ duration: 0.5 }} // 애니메이션 지속 시간
@@ -110,3 +111,4 @@ function SearchBox() {
 }
 
 export default SearchBox;
+

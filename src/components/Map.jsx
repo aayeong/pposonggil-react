@@ -252,6 +252,7 @@ const GridBtn = styled(LocationBtn)`
 
 const Icon = styled(FontAwesomeIcon)`
   color: #216CFF;
+  transition: color 0.2s ease;
 `;
 
 const KakaoMap = styled.div`
@@ -265,7 +266,7 @@ function Map() {
   const [isLoading, setIsLoading] = useState(false);
   const setLocationBtnState = useSetRecoilState(locationBtnState);
 
-  const [grid, setGrid] = useState(true);
+  const [grid, setGrid] = useState(false);
   const [isGridLoading, setIsGridLoading] = useState(false);
 
   const [address, setAddress] = useRecoilState(addressState);
@@ -310,7 +311,6 @@ function Map() {
             });
           });
         }
-
         // 지도 이동 이벤트 리스너 등록
         kakao.maps.event.addListener(mapInstance.current, 'idle', () => {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
@@ -356,6 +356,7 @@ function Map() {
 
           mapInstance.current.setCenter(locPosition);
           mapInstance.current.setLevel(3);
+          setLocationBtnState(true);
 
           if (!markerInstance.current) {
             markerInstance.current = new kakao.maps.Marker({
@@ -365,7 +366,6 @@ function Map() {
           } else {
             markerInstance.current.setPosition(locPosition);
             markerInstance.current.setMap(mapInstance.current);
-            setLocationBtnState(prev => !prev);
           }
 
           // 좌표를 주소로 변환
@@ -397,7 +397,7 @@ function Map() {
       if (markerInstance.current) {
         markerInstance.current.setMap(null); // 마커 제거
       }
-      setLocationBtnState(prev => !prev);
+      setLocationBtnState(false);
       setIsLoading(false);
       setIsLocated(false);
     }
