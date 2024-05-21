@@ -109,7 +109,7 @@ function Map() {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
         });
 
-        //지도 클릭 이벤트 리스너 등록
+        // 지도 클릭 이벤트 리스너 등록
         kakao.maps.event.addListener(mapInstance.current, 'click', (mouseEvent) => {
           const latlng = mouseEvent.latLng;
           searchDetailAddrFromCoords(latlng, (result, status) => {
@@ -118,19 +118,18 @@ function Map() {
               if (markerInstance.current) {
                 markerInstance.current.setMap(null);
               }
-              markerInstance.current = new kakao.maps.Marker({
-                position: latlng,
-                map: mapInstance.current,
-              });
-
-              setDetailedAddress(detailAddr);
-              setIsLocated(false); //지도 클릭해서 마크업 시 현재위치 버튼 비활성화
-              mapInstance.current.panTo(latlng); //마커 위치 중심으로 지도 중심 변경
+              if(result[0].road_address) { // 도로명 주소 있는 경우에만 지도 마크업
+                markerInstance.current = new kakao.maps.Marker({
+                  position: latlng,
+                  map: mapInstance.current,
+                });
+                setDetailedAddress(detailAddr);
+                setIsLocated(false); //지도 클릭해서 마크업 시 현재위치 버튼 비활성화
+                mapInstance.current.panTo(latlng); //마커 위치 중심으로 지도 중심 변경
+              }
             }
           });
         });
-        
-        
 
       });
     };

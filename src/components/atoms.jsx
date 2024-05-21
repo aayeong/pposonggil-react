@@ -15,7 +15,7 @@ export const currentAddressState = atom({
   default: { 
     region2: "", //구
     region3: "", //동
-    addressName: "", //도로명 주소
+    addressName: "", //지번 주소
   }
 })
 
