@@ -5,7 +5,7 @@ import Map from "../components/Map";
 import SearchBox from "../components/SearchBox";
 import Header from "../layouts/Header";
 import Navigation from "../layouts/Navigation";
-import WeatherComponent from "../components/Weather";
+import Weather from "../components/Weather";
 
 
 const ContentBox = styled.div`
@@ -39,7 +39,7 @@ function Home() {
           <Map />
           {/* 지도 하단 info 창  */}
           <ContentBox>
-            <WeatherComponent />
+            <Weather />
           </ContentBox>
         </Wrapper>
        
