@@ -169,7 +169,7 @@ function Map() {
           const locPosition = new kakao.maps.LatLng(lat, lon);
 
           mapInstance.current.setCenter(locPosition);
-          mapInstance.current.setLevel(3);
+          mapInstance.current.setLevel(2);
           setLocationBtnState(true);
 
           if (!markerInstance.current) {
