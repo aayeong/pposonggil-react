@@ -109,7 +109,7 @@ function Map() {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
         });
 
-        // 지도 클릭 이벤트 리스너 등록
+        //지도 클릭 이벤트 리스너 등록
         kakao.maps.event.addListener(mapInstance.current, 'click', (mouseEvent) => {
           const latlng = mouseEvent.latLng;
           searchDetailAddrFromCoords(latlng, (result, status) => {
@@ -124,9 +124,14 @@ function Map() {
               });
 
               setDetailedAddress(detailAddr);
+              setIsLocated(false); //지도 클릭해서 마크업 시 현재위치 버튼 비활성화
+              mapInstance.current.panTo(latlng); //마커 위치 중심으로 지도 중심 변경
             }
           });
         });
+        
+        
+
       });
     };
   }, []);
@@ -155,6 +160,7 @@ function Map() {
   }, [setAddress]);
 
   const handleLocationBtn = useCallback(() => {
+    
     setIsLoading(true);
     if (!isLocated) {
       if (navigator.geolocation) {
