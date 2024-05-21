@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { addressState, currentAddressState, locationBtnState } from './atoms';
 
@@ -10,7 +10,7 @@ import { faLocationCrosshairs, faSpinner, faBorderAll } from "@fortawesome/free-
 const { kakao } = window;
 
 const BtnContainer = styled.div`
-  width:100%;
+  width: 100%;
   padding: 0px 12px 12px 12px;
   z-index: 100;
   position: absolute;
@@ -62,13 +62,13 @@ function Map() {
 
   const [address, setAddress] = useRecoilState(addressState);
   const [currentAddress, setCurrentAddress] = useRecoilState(currentAddressState);
-
+  const [detailedAddress, setDetailedAddress] = useState('');
 
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
   const geocoder = useRef(null);
-  
+
   // 지도 생성
   useEffect(() => {
     const script = document.createElement('script');
@@ -86,63 +86,75 @@ function Map() {
         mapInstance.current = new kakao.maps.Map(container, options);
         geocoder.current = new kakao.maps.services.Geocoder();
 
-       // 현재 위치 정보 출력
-       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          const locPosition = new kakao.maps.LatLng(lat, lon);
-          // 좌표를 주소로 변환
-          geocoder.current.coord2Address(lon, lat, (result, status) => {
-            if (status === kakao.maps.services.Status.OK) {
-              setCurrentAddress({ 
-                region2: result[0].address.region_2depth_name, 
-                region3: result[0].address.region_3depth_name,
-                addressName: result[0].address.address_name,
-              });
-            }
+        // 현재 위치 정보 출력
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const locPosition = new kakao.maps.LatLng(lat, lon);
+            // 좌표를 주소로 변환
+            geocoder.current.coord2Address(lon, lat, (result, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                setCurrentAddress({
+                  region2: result[0].address.region_2depth_name,
+                  region3: result[0].address.region_3depth_name,
+                  addressName: result[0].address.address_name,
+                });
+              }
+            });
           });
-        });
-      }
-     
+        }
         // 지도 이동 이벤트 리스너 등록
         kakao.maps.event.addListener(mapInstance.current, 'idle', () => {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
         });
+
+        // 지도 클릭 이벤트 리스너 등록
+        kakao.maps.event.addListener(mapInstance.current, 'click', (mouseEvent) => {
+          const latlng = mouseEvent.latLng;
+          searchDetailAddrFromCoords(latlng, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+              const detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+              if (markerInstance.current) {
+                markerInstance.current.setMap(null);
+              }
+              markerInstance.current = new kakao.maps.Marker({
+                position: latlng,
+                map: mapInstance.current,
+              });
+
+              setDetailedAddress(detailAddr);
+            }
+          });
+        });
       });
     };
   }, []);
-  console.log("맵 생성 직후 currentAddress: ");
-  console.log(currentAddress);
-  console.log("맵 생성 직후 address: ");
-  console.log(address);
-  const searchAddrFromCoords = (coords, callback) => {
-    // 좌표로 행정동 주소 정보를 요청합니다
-    geocoder.current.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
-  };
 
-  const searchDetailAddrFromCoords = (coords, callback) => {
-    // 좌표로 법정동 상세 주소 정보를 요청합니다
+  const searchAddrFromCoords = useCallback((coords, callback) => {
+    geocoder.current.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+  }, []);
+
+  const searchDetailAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2Address(coords.getLng(), coords.getLat(), callback);
-  };
+  }, []);
 
-  const displayCenterInfo = (result, status) => {
+  const displayCenterInfo = useCallback((result, status) => {
     if (status === kakao.maps.services.Status.OK) {
       for (let i = 0; i < result.length; i++) {
-        // 행정동의 region_type 값은 'H' 이므로
         if (result[i].region_type === 'H') {
-          setAddress({ 
-            region2: result[i].region_2depth_name, 
+          setAddress({
+            region2: result[i].region_2depth_name,
             region3: result[i].region_3depth_name,
             addressName: result[i].address_name
           });
           break;
         }
       }
-    }    
-  };
+    }
+  }, [setAddress]);
 
-  const handleLocationBtn = () => {
+  const handleLocationBtn = useCallback(() => {
     setIsLoading(true);
     if (!isLocated) {
       if (navigator.geolocation) {
@@ -165,19 +177,16 @@ function Map() {
             markerInstance.current.setMap(mapInstance.current);
           }
 
-          // 좌표를 주소로 변환 //수정필요 오류 있음
           geocoder.current.coord2Address(lon, lat, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
               for (let i = 0; i < result.length; i++) {
-                // 행정동의 region_type 값은 'H' 이므로
                 if (result[i].region_type === 'H') {
-                  setCurrentAddress({ 
-                    region2: result[i].region_2depth_name, 
+                  setCurrentAddress({
+                    region2: result[i].region_2depth_name,
                     region3: result[i].region_3depth_name,
                     addressName: result[i].address_name
                   });
-                  console.log("location 버튼 클릭 시")
-                  console.log(currentAddress);
+                  setDetailedAddress(result[i].address_name);
                   break;
                 }
               }
@@ -194,61 +203,65 @@ function Map() {
         alert('Geolocation을 사용할 수 없습니다.');
         setIsLoading(false);
       }
-    } else { //LocationBtn 비활성화 시
+    } else {
       const seoulPosition = new kakao.maps.LatLng(37.5665, 126.9780);
       mapInstance.current.setCenter(seoulPosition);
       mapInstance.current.setLevel(8);
 
       if (markerInstance.current) {
-        markerInstance.current.setMap(null); // 마커 제거
+        markerInstance.current.setMap(null);
       }
       setLocationBtnState(false);
       setIsLoading(false);
       setIsLocated(false);
+      setDetailedAddress('');
     }
-  };
+  }, [isLocated, setLocationBtnState, setCurrentAddress]);
 
-  const handleGridBtn = () => {
+  const handleGridBtn = useCallback(() => {
     setGrid(prev => !prev);
-    if(grid) {
-      //setIsGirdLoading(true);
-      //showGrid 함수 호출
-      //setIsGridLoading(false);
+    if (grid) {
+      // setIsGridLoading(true);
+      // showGrid 함수 호출
+      // setIsGridLoading(false);
     }
-  };
+  }, [grid]);
+
+  console.log(detailedAddress); //detailedAddress에 지도 클릭한 위치 상세 주소 정보 담겨있음 이걸로 하단창 장소 정보 구현하면 될 듯
 
   return (
     <KakaoMap id="map" ref={mapRef}>
       <BtnContainer>
-        <GridBtn 
+        <GridBtn
           id="grid"
-          onClick={ handleGridBtn }
-          isGridLoading={ isGridLoading }
-         >
-          <Icon 
-            icon={ isGridLoading ? faSpinner : faBorderAll }
+          onClick={handleGridBtn}
+          isGridLoading={isGridLoading}
+        >
+          <Icon
+            icon={isGridLoading ? faSpinner : faBorderAll}
             style={{ color: grid ? 'tomato' : '#216CFF' }}
           />
         </GridBtn>
-          
-        <LocationBtn 
+
+        <LocationBtn
           id="location"
-          onClick={ handleLocationBtn }
-          isLoading={ isLoading }
+          onClick={handleLocationBtn}
+          isLoading={isLoading}
           initial={{ rotate: 0 }}
           animate={{ rotate: isLoading ? 360 : 0 }}
           transition={{ duration: 1, repeat: isLoading ? Infinity : 0 }}
         >
-          <Icon 
-            icon={ isLoading ? faSpinner : faLocationCrosshairs }
+          <Icon
+            icon={isLoading ? faSpinner : faLocationCrosshairs}
             style={{ color: isLocated ? 'tomato' : '#216CFF' }}
           />
         </LocationBtn>
       </BtnContainer>
     </KakaoMap>
-  )
+  );
 }
 
 export default Map;
+
 
 
