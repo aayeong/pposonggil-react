@@ -1,6 +1,9 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { addressState, locationBtnState } from "./atoms";
+
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,8 +29,7 @@ const Container = styled.div`
   border-radius: 5px;
   padding: 12px;
   margin: 0px 12px;
-  &:last-child {
-    //버튼 컨테이너
+  &:last-child { //버튼 컨테이너
     width: 15%;
     padding: 0px;
     margin-left: 0px;
@@ -36,6 +38,7 @@ const Container = styled.div`
 `;
 
 const Input = styled(motion.input)`
+  text-align: left;
   width: 100%;
   height: 100%;
   font-size: 16px;
@@ -63,19 +66,42 @@ const Btn = styled.button`
 `;
 
 function SearchBox() {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const openSearch = () => {
-    setSearchOpen(true);
+  const address = useRecoilValue(addressState);
+  const locationBtnStateValue = useRecoilValue(locationBtnState);
+  const [placeholderText, setPlaceholderText] = useState("");
+
+  useEffect(() => {
+    if (locationBtnStateValue) {
+      setPlaceholderText("장소·주소 검색");
+    } else {
+      setPlaceholderText(`${address.region2} ${address.region3}`);
+    }
+  }, [locationBtnStateValue, address]);
+
+  const handleChange = (e) => {
+    setPlaceholderText(e.target.value);
   };
 
   return (
-    <SearchContainer >
+    <SearchContainer>
       <Container>
         <Icon icon={faMagnifyingGlass} />
-        <Input placeholder="장소·주소 검색"></Input>
+        <AnimatePresence>
+          <Input
+            type="text"
+            value={placeholderText}
+            onChange={handleChange}
+            placeholder={placeholderText}
+            key={locationBtnStateValue ? "search" : "address"}
+            initial={{ opacity: 0 }} // 초기 상태 설정
+            animate={{ opacity: 1 }} // 애니메이션 적용
+            transition={{ duration: 0.5 }} // 애니메이션 지속 시간
+          />
+        </AnimatePresence>
       </Container>
+
       <Container>
-        <Btn onClick={openSearch}>
+        <Btn>
           길찾기
         </Btn>
       </Container>
@@ -83,24 +109,4 @@ function SearchBox() {
   );
 }
 
-// function SearchBox() {
-//   return(
-//     <form class="searchBox" action="/main/POI/result" method="get" style={{position: "absolute", zIndex: "2"}}>
-//       <div class="searchBox-component">
-//         <input id="start-field" autocomplete="off" name="start" required type="text" placeholder="출발지 검색" />
-//         <input id="start-lat" type="hidden" name="start_lat" />
-//         <input id="start-lon" type="hidden" name="start_lon" />
-
-//         <input id="end-field" autocomplete="off" name="end" required type="text" placeholder="목적지 검색" />
-//         <input id="end-lat" type="hidden" name="end_lat" />
-//         <input id="end-lon" type="hidden" name="end_lon" />
-//       </div>
-//       <div class="searchBox-component">
-//         <input type="submit" value="길찾기"/>
-//       </div>
-//     </form>
-//   );
-// }
-
-
-export default SearchBox
+export default SearchBox;

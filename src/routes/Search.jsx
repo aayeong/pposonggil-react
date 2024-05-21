@@ -15,7 +15,7 @@ function Search() {
     <React.Fragment>
       <Header />
         <Wrapper>
-
+          
         </Wrapper>
       <Navigation />
     </React.Fragment>
