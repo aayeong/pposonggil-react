@@ -368,7 +368,7 @@ function Map() {
             markerInstance.current.setMap(mapInstance.current);
           }
 
-          // 좌표를 주소로 변환
+          // 좌표를 주소로 변환 //수정필요 오류 있음
           geocoder.current.coord2Address(lon, lat, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
               setAddress({ 

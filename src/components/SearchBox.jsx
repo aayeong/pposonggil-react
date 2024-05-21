@@ -93,10 +93,10 @@ function SearchBox() {
             type="text"
             onChange={handleChange}
             placeholder={placeholderText}
-            key={locationBtnStateValue ? "address" : "search"}
+            key={placeholderText}
             initial={{ opacity: 0 }} // 초기 상태 설정
             animate={{ opacity: 1 }} // 애니메이션 적용
-            transition={{ duration: 0.5 }} // 애니메이션 지속 시간
+            transition={{ duration: 0.8 }} // 애니메이션 지속 시간
           />
         </AnimatePresence>
       </Container>
