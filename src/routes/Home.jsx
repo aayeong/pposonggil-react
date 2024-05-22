@@ -25,31 +25,16 @@ const ContentBox = styled.div`
   box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.15);
 `;
 
-const Wrapper = styled.div`
-  top: 70px;
-  bottom: 70px;
-  right:0;
-  left:0;
-  position: fixed;
-`;
-
 function Home() {
   const [Content, setContent] = useState("Home");
   return (
       <React.Fragment>
-        <Header />
-        {/* 화면 */}
-        <Wrapper id="mapWrapper"> 
           <Map>
             <SearchBox /> 
           </Map>
-          {/* 지도 하단 info 창  */}
           <ContentBox>
             <Weather />
           </ContentBox>
-        </Wrapper>
-        
-        <Navigation />
       </React.Fragment>
   )
 }

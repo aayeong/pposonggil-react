@@ -126,7 +126,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 15px 0px;
+  margin: 20px 0px;
   width: 100%;
   z-index: 100;
   position: sticky;
@@ -143,7 +143,7 @@ const Container = styled.div`
   align-items: center;
   border-radius: 15px;
   padding: 12px;
-  margin: 0px 15px;
+  margin: 0px 20px;
   &:last-child { //버튼 컨테이너
     width: 15%;
     padding: 0px;
@@ -172,12 +172,13 @@ const Btn = styled.button`
   border: none;
   cursor: pointer;
   text-align: center;
-  background-color: skyblue;
+  background-color: #003E5E;
   width: 100%;
   height: 100%;
   border-radius: 15px;
   font-size: 14px;
   font-weight: 600;
+  color: white;
 `;
 
 function SearchBox() {

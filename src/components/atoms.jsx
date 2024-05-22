@@ -21,7 +21,7 @@ export const addressState = atom({
 
 // 햔재 위치 주소 정보
 export const currentAddressState = atom({
-  key: "trackingAddress",
+  key: "currentAddress",
   default: { 
     depth2: "", //구
     depth3: "", //동
@@ -50,4 +50,12 @@ export const gridState = atom({
 export const navState = atom({
   key: "navState",
   defualt: "weather",
+})
+
+export const routeInfo = atom({
+  key: "routeInfo",
+  default: {
+    start: "",
+    end: "",
+  }
 })

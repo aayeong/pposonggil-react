@@ -5,7 +5,7 @@ import { addressState, currentAddressState, gridState, locationBtnState, mapCent
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationCrosshairs, faSpinner, faBorderAll } from "@fortawesome/free-solid-svg-icons";
+import { faLocationCrosshairs, faSpinner, faBorderAll , faCloudShowersHeavy} from "@fortawesome/free-solid-svg-icons";
 import SearchBox from './SearchBox';
 
 const { kakao } = window;
@@ -17,14 +17,14 @@ const BtnContainer = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  bottom: 15px;
-  right: 15px;
+  bottom: 20px;
+  right: 20px;
   position: absolute;
 `;
 
 const LocationBtn = styled(motion.button)`
   all: unset;
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -34,20 +34,32 @@ const LocationBtn = styled(motion.button)`
   position: sticky;
   border-radius: 50%;
   background-color: white;
-  padding: 10px;
-  font-size: 22px;
+  padding: 12px;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   cursor: ${props => (props.isLoading ? 'not-allowed' : 'pointer')};
 `;
 
 const GridBtn = styled(LocationBtn)`
-  font-size: 23px;
   cursor: ${props => (props.isGridLoading ? 'not-allowed' : 'pointer')};
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  color: #216CFF;
+  width: 22px;
+  height: 22px;
   transition: color 0.2s ease;
+`;
+
+const RainBtn =styled(LocationBtn)`
+  margin: 15px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  position: sticky;
+  color: #d1edff;
+  background-color: gray;
 `;
 
 const KakaoMap = styled.div`
@@ -260,6 +272,7 @@ function Map() {
   return (
     <KakaoMap id="map" ref={mapRef}>
       <SearchBox />
+      <RainBtn><Icon icon={faCloudShowersHeavy}/></RainBtn>
       <BtnContainer>
         <GridBtn
           id="grid"
