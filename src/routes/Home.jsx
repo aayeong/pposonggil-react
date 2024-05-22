@@ -9,15 +9,16 @@ import Weather from "../components/Weather";
 
 
 const ContentBox = styled.div`
-  height: 34.5vh;
-  max-height: 34.5vh;
+  height: 30vh;
+  min-height:35vh;
+  max-height: 30vh;
   overflow-y: scroll;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: whitesmoke;
-  position: relative;
-  bottom: 0px;
+  position: sticky;
+  bottom: 70px;
   left: 0;
   right: 0;
   z-index: 200;
@@ -25,7 +26,11 @@ const ContentBox = styled.div`
 `;
 
 const Wrapper = styled.div`
-  margin: 70px 0px;
+  top: 70px;
+  bottom: 70px;
+  right:0;
+  left:0;
+  position: fixed;
 `;
 
 function Home() {
@@ -34,15 +39,16 @@ function Home() {
       <React.Fragment>
         <Header />
         {/* 화면 */}
-        <Wrapper id="wrapper">
-          <SearchBox /> 
-          <Map />
+        <Wrapper id="mapWrapper"> 
+          <Map>
+            <SearchBox /> 
+          </Map>
           {/* 지도 하단 info 창  */}
           <ContentBox>
             <Weather />
           </ContentBox>
         </Wrapper>
-       
+        
         <Navigation />
       </React.Fragment>
   )

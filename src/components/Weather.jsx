@@ -44,12 +44,18 @@ const IconBox = styled(Box)`
 const Description = styled.div`
   font-size: 20px;
   margin-top: 10px;
+  color: #2e2e2e;
 `;
 
 const Row = styled.div`
   display: flex;
   &:first-child {
     justify-content: space-between;
+    background-color: white;
+    box-shadow: 0px 0px 10px 3px rgba(109, 109, 109, 0.1);
+    border-radius: 25px;
+    margin: 0px 10px;
+    margin-top: 5px;
   }
 `;
 
@@ -60,6 +66,8 @@ const Icon = styled(FontAwesomeIcon)`
 
 const Hr = styled.hr`
   border: 1px dashed rgba(184, 184, 184, 0.611);
+  margin: 15px;
+  /* margin-top: 20px; */
 `;
 
 const Address = styled.div`
@@ -69,14 +77,9 @@ const Address = styled.div`
 `;
 
 const Temp = styled.div`
-  font-size: 35px;
-`;
-
-const FeelTemp = styled.div`
-  font-size: 16px;
-  margin-top: 5px;
-  margin-left: 3px;
-  color: #414141;
+  font-size: 50px;
+  padding-left: 10px;
+  color: #2e2e2e;
 `;
 
 const WeatherInfo = styled.div`
@@ -85,15 +88,14 @@ const WeatherInfo = styled.div`
   width: auto;
   background-color: white;
   box-shadow: 0px 0px 5px 3px rgba(109, 109, 109, 0.15);
-  padding: 8px 14px;;
+  padding: 5px 10px;;
   border-radius: 20px;
 `;
 
-const TempBox = styled(Box)`
+const TempBox = styled.div`
   display: flex;
   width: auto;
-  padding: 0px;
-  background-color: whitesmoke;
+  margin-top: 15px;
 `;
 
 const WindIcon = styled(FontAwesomeIcon)`
@@ -106,14 +108,16 @@ const HumidIcon = styled(FontAwesomeIcon)`
 `;
 
 const WeatherBox = styled(Box)`
-  box-shadow: 0px 0px 5px 3px rgba(109, 109, 109, 0.15);
+  box-shadow: 0px 0px 5px 3px rgba(109, 109, 109, 0.1);
   background-color: white;
   width: auto;
+  font-size:16px;
+  padding: 10px 12px;
+  margin-top: 0px;
+  margin-bottom: 15px;
 `;
 
-
-
-export default function Weather() {
+function Weather() {
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -167,18 +171,17 @@ export default function Weather() {
         <Box>
           <Address>{currentAddress.region2} {currentAddress.region3}<Icon icon={faLocationArrow} /></Address>
           <Temp>{roundedTemp}°</Temp>
-          <FeelTemp>체감 {roundedFeelsLike}°</FeelTemp>
+          <TempBox>
+            <WeatherInfo><span style={{ color: "gray" }}>체감</span> {roundedFeelsLike}°</WeatherInfo></TempBox>
+          <TempBox>
+            <WeatherInfo><span style={{ color: "tomato" }}>최고</span> {roundedTempMax}°</WeatherInfo>
+            <WeatherInfo><span style={{ color: "#216CFF"}}>최저</span> {roundedTempMin}°</WeatherInfo>
+          </TempBox>
         </Box>
         <IconBox>
           <WeatherIcon src={weatherIconUrl} />
           <Description>{weatherData.weather[0].description}</Description>
         </IconBox>
-      </Row>
-      <Row id="temperature">
-        <TempBox>
-          <WeatherInfo><span style={{ color: "tomato" }}>최고</span> {roundedTempMax}°</WeatherInfo>
-          <WeatherInfo><span style={{ color: "#216CFF"}}>최저</span> {roundedTempMin}°</WeatherInfo>
-        </TempBox>
       </Row>
       <Hr/>
       <Row id="wind_humid">
@@ -191,25 +194,7 @@ export default function Weather() {
       </Row>
       
     </Container>
-    
-    
-    // <Container>
-    //   <Box>{address.region2} {address.region3}</Box>
-    //   <Box>
-    //     <WeatherImg
-    //       className="weather-icon"
-    //       src={weatherIconUrl}
-    //       alt="Weather Icon"
-    //     />
-    //   </Box>
-    //   <Box className="temp-now">기온 {roundedTemp}°</Box>
-    //   <Box>{weatherData.weather[0].description}</Box>
-    //   <Box className="temp-feel">체감온도 {roundedFeelsLike}°</Box>
-    //   <Box>강수정보</Box>
-    //   <Box className="wind">풍속 {weatherData.wind.speed}m/s</Box>
-    //   <Box className="humid">습도 {weatherData.main.humidity}%</Box>
-    //   <Box>최고 {roundedTempMax}°</Box>
-    //    <Box>최저 {roundedTempMin}°</Box>
-    //  </Container>
    );
   }
+
+  export default Weather

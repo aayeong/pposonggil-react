@@ -114,7 +114,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { addressState, locationBtnState } from "./atoms";
+import { addressState, locationBtnState, mapCenterState, markerState } from "./atoms";
 
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
@@ -128,7 +128,7 @@ const SearchContainer = styled.div`
   margin: 12px 0px;
   width: 100%;
   z-index: 100;
-  position: absolute;
+  position: sticky;
 `;
 
 const Container = styled.div`
@@ -180,19 +180,17 @@ const Btn = styled.button`
 `;
 
 function SearchBox() {
-  const address = useRecoilValue(addressState);
-  const [locationBtnStateValue, setLocationBtnStateValue] = useRecoilState(locationBtnState);
+  const mapCenterAddress = useRecoilValue(mapCenterState);
   const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
 
+  //검색창 placeholder 내용 동적 변경
   useEffect(() => {
-    if (locationBtnStateValue === true) {
-      setPlaceholderText(`${address.region2} ${address.region3}`);
-    } else {
-      setPlaceholderText("장소·주소 검색");
+    if (mapCenterAddress.depth2 && mapCenterAddress.depth3) {
+      setPlaceholderText(`${mapCenterAddress.depth2} ${mapCenterAddress.depth3}`);
     }
-  }, [locationBtnStateValue, address]);
+  }, [mapCenterAddress]);
 
-  const handleChange = (e) => {
+  const onChange = (e) => {
     setPlaceholderText(e.target.value);
   };
 
@@ -203,12 +201,12 @@ function SearchBox() {
         <AnimatePresence>
           <Input
             type="text"
-            onChange={handleChange}
+            onChange={onChange}
             placeholder={placeholderText}
             key={placeholderText}
-            initial={{ opacity: 0 }} // 초기 상태 설정
-            animate={{ opacity: 1 }} // 애니메이션 적용
-            transition={{ duration: 0.8 }} // 애니메이션 지속 시간
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
           />
         </AnimatePresence>
       </Container>

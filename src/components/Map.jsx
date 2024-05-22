@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addressState, currentAddressState, locationBtnState } from './atoms';
+import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState } from './atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationCrosshairs, faSpinner, faBorderAll } from "@fortawesome/free-solid-svg-icons";
+import SearchBox from './SearchBox';
 
 const { kakao } = window;
 
@@ -13,13 +14,13 @@ const BtnContainer = styled.div`
   width: 100%;
   padding: 0px 12px 12px 12px;
   z-index: 100;
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
   bottom: 0;
   right: 0;
+  position: sticky;
 `;
 
 const LocationBtn = styled(motion.button)`
@@ -47,23 +48,23 @@ const Icon = styled(FontAwesomeIcon)`
 `;
 
 const KakaoMap = styled.div`
-  position: relative;
+  /* position: relative; */
   width: 100%;
   height: 50vh;
 `;
 
 function Map() {
-  const [isLocated, setIsLocated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const setLocationBtnState = useSetRecoilState(locationBtnState);
-
-  const [grid, setGrid] = useState(false);
   const [isGridLoading, setIsGridLoading] = useState(false);
 
-  const [address, setAddress] = useRecoilState(addressState);
-  const [currentAddress, setCurrentAddress] = useRecoilState(currentAddressState);
-  const [detailedAddress, setDetailedAddress] = useState('');
+  const [address, setAddress] = useRecoilState(addressState); //마크업 및 지도 이동 시 지도 중심 위치 주소 (temp주소)
+  const [currentAddress, setCurrentAddress] = useRecoilState(currentAddressState); // 현재 위치 추적 주소
+  const [mapCenterAddress, setMapCenterAddress] = useRecoilState(mapCenterState);
 
+  const [activeTracking, setActiveTracking] = useRecoilState(locationBtnState);
+  const [activeMarker, setActiveMarker] = useRecoilState(markerState);
+  const [activeGrid, setActiveGrid] = useRecoilState(gridState);
+  
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
@@ -86,7 +87,7 @@ function Map() {
         mapInstance.current = new kakao.maps.Map(container, options);
         geocoder.current = new kakao.maps.services.Geocoder();
 
-        // 현재 위치 정보 출력
+        // 현재 위치 주소 정보 currentAddressState atom에 저장
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const lat = position.coords.latitude;
@@ -109,31 +110,43 @@ function Map() {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
         });
 
-        // 지도 클릭 이벤트 리스너 등록
+        // 지도 클릭 이벤트 리스너 등록(마커 표시 및 지도 중심 이동)
         kakao.maps.event.addListener(mapInstance.current, 'click', (mouseEvent) => {
           const latlng = mouseEvent.latLng;
           searchDetailAddrFromCoords(latlng, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-              const detailAddr = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-              if (markerInstance.current) {
+              const roadAddressName = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+              
+              if (markerInstance.current) { //기존 마커 있으면 제거
                 markerInstance.current.setMap(null);
+                setActiveMarker(false);
               }
+              
               if(result[0].road_address) { // 도로명 주소 있는 경우에만 지도 마크업
                 markerInstance.current = new kakao.maps.Marker({
                   position: latlng,
                   map: mapInstance.current,
                 });
-                setDetailedAddress(detailAddr);
-                setIsLocated(false); //지도 클릭해서 마크업 시 현재위치 버튼 비활성화
-                mapInstance.current.panTo(latlng); //마커 위치 중심으로 지도 중심 변경
+                setAddress({
+                  depth2: result[0].address.region_2depth_name,
+                  depth3: result[0].address.region_3depth_name,
+                  roadAddressName: roadAddressName,
+                });
+                setActiveTracking(false); //지도 클릭해서 마크업 시 위치 추적 버튼 비활성화
+                setActiveMarker(true); //마커 활성화 상태 업데이트
+                mapInstance.current.panTo(latlng); //마커 위치로 지도 중심 변경
+              } else {
+               setActiveMarker(false); 
               }
             }
           });
         });
-
+        //
       });
     };
+    console.log("지도 랜더링")
   }, []);
+
 
   const searchAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
@@ -143,26 +156,27 @@ function Map() {
     geocoder.current.coord2Address(coords.getLng(), coords.getLat(), callback);
   }, []);
 
+  //지도 중심 이동 시 중심 좌표 위치 주소 address atom에 저장
   const displayCenterInfo = useCallback((result, status) => {
     if (status === kakao.maps.services.Status.OK) {
       for (let i = 0; i < result.length; i++) {
         if (result[i].region_type === 'H') {
-          setAddress({
-            region2: result[i].region_2depth_name,
-            region3: result[i].region_3depth_name,
-            addressName: result[i].address_name
+          setMapCenterAddress({
+            depth2: result[i].region_2depth_name,
+            depth3: result[i].region_3depth_name,
           });
           break;
         }
       }
     }
-  }, [setAddress]);
+  }, [setMapCenterAddress]);
 
+  //위치 추적 버튼 핸들러
   const handleLocationBtn = useCallback(() => {
-    
     setIsLoading(true);
-    if (!isLocated) {
+    if (!activeTracking) { 
       if (navigator.geolocation) {
+        // 현재 위치 추적 및 지도 확대/이동
         navigator.geolocation.getCurrentPosition((position) => {
           const lat = position.coords.latitude;
           const lon = position.coords.longitude;
@@ -170,8 +184,9 @@ function Map() {
 
           mapInstance.current.setCenter(locPosition);
           mapInstance.current.setLevel(2);
-          setLocationBtnState(true);
-
+          setActiveTracking(true);
+          //
+          //마커 업데이트
           if (!markerInstance.current) {
             markerInstance.current = new kakao.maps.Marker({
               position: locPosition,
@@ -181,25 +196,25 @@ function Map() {
             markerInstance.current.setPosition(locPosition);
             markerInstance.current.setMap(mapInstance.current);
           }
-
+          setActiveMarker(true);
+          //
+          //현재 위치 주소 정보 currentAddress atom에 저장
           geocoder.current.coord2Address(lon, lat, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
               for (let i = 0; i < result.length; i++) {
                 if (result[i].region_type === 'H') {
                   setCurrentAddress({
-                    region2: result[i].region_2depth_name,
-                    region3: result[i].region_3depth_name,
-                    addressName: result[i].address_name
+                    depth2: result[i].region_2depth_name,
+                    depth3: result[i].region_3depth_name,
+                    addressName: result[i].address_name,
                   });
-                  setDetailedAddress(result[i].address_name);
                   break;
                 }
               }
             }
           });
-
+          //
           setIsLoading(false);
-          setIsLocated(true);
         }, () => {
           alert('위치를 가져올 수 없습니다.');
           setIsLoading(false);
@@ -209,33 +224,40 @@ function Map() {
         setIsLoading(false);
       }
     } else {
-      const seoulPosition = new kakao.maps.LatLng(37.5665, 126.9780);
-      mapInstance.current.setCenter(seoulPosition);
-      mapInstance.current.setLevel(8);
-
-      if (markerInstance.current) {
+      if (markerInstance.current) { //마커 있으면 제거
         markerInstance.current.setMap(null);
       }
-      setLocationBtnState(false);
+
+      setActiveTracking(false);// 위치 추적 상태 비활성화로 atom 업데이트
+      setActiveMarker(false); //마커 상태 비활성화로 atom 업데이트
       setIsLoading(false);
-      setIsLocated(false);
-      setDetailedAddress('');
+      //
     }
-  }, [isLocated, setLocationBtnState, setCurrentAddress]);
+  }, [activeTracking]);
 
+  //격자 표시 함수(아직 구현 안함)
   const handleGridBtn = useCallback(() => {
-    setGrid(prev => !prev);
-    if (grid) {
-      // setIsGridLoading(true);
-      // showGrid 함수 호출
-      // setIsGridLoading(false);
+    setIsGridLoading(true);
+    //지도 중심 서울 중심으로 이동 및 지도 확대 레벨 변경
+    const seoulPosition = new kakao.maps.LatLng(37.5665, 126.9780);
+    mapInstance.current.setCenter(seoulPosition);
+    mapInstance.current.setLevel(8);
+    
+    if(!activeGrid) {
+      console.log("show grid!");
+    } else {
+      console.log("hide grid!");
     }
-  }, [grid]);
+    setActiveGrid(prev=> !prev);
+    setIsGridLoading(false);
+  }, [activeGrid]);
 
-  console.log(detailedAddress); //detailedAddress에 지도 클릭한 위치 상세 주소 정보 담겨있음 이걸로 하단창 장소 정보 구현하면 될 듯
-
+  console.log("클릭 위치 주소 정보: ", address);
+  console.log("맵 중심 위치 주소 정보: ", mapCenterAddress);
+  console.log("위치 추적 주소는: ", currentAddress);
   return (
     <KakaoMap id="map" ref={mapRef}>
+      <SearchBox></SearchBox>
       <BtnContainer>
         <GridBtn
           id="grid"
@@ -244,7 +266,7 @@ function Map() {
         >
           <Icon
             icon={isGridLoading ? faSpinner : faBorderAll}
-            style={{ color: grid ? 'tomato' : '#216CFF' }}
+            style={{ color: activeGrid ? "tomato" : "#216CFF" }}
           />
         </GridBtn>
 
@@ -258,7 +280,7 @@ function Map() {
         >
           <Icon
             icon={isLoading ? faSpinner : faLocationCrosshairs}
-            style={{ color: isLocated ? 'tomato' : '#216CFF' }}
+            style={{ color: activeTracking ? "tomato" : "#216CFF" }}
           />
         </LocationBtn>
       </BtnContainer>
