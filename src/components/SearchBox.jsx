@@ -113,6 +113,7 @@
 // export default SearchBox;
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { addressState, locationBtnState, mapCenterState, markerState } from "./atoms";
 
@@ -125,7 +126,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 12px 0px;
+  margin: 15px 0px;
   width: 100%;
   z-index: 100;
   position: sticky;
@@ -135,14 +136,14 @@ const Container = styled.div`
   width: 85%;
   height: 45px;
   background-color: whitesmoke;
-  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 5px 4px rgba(109, 109, 109, 0.15);
   padding: 0px 20px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-radius: 5px;
+  border-radius: 15px;
   padding: 12px;
-  margin: 0px 12px;
+  margin: 0px 15px;
   &:last-child { //버튼 컨테이너
     width: 15%;
     padding: 0px;
@@ -174,7 +175,7 @@ const Btn = styled.button`
   background-color: skyblue;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 15px;
   font-size: 14px;
   font-weight: 600;
 `;
@@ -192,6 +193,10 @@ function SearchBox() {
 
   const onChange = (e) => {
     setPlaceholderText(e.target.value);
+  };
+
+  const handleSearchBtn = () => {
+    navigate('/search');
   };
 
   return (
@@ -212,7 +217,7 @@ function SearchBox() {
       </Container>
 
       <Container>
-        <Btn>
+        <Btn onClick={handleSearchBtn}>
           길찾기
         </Btn>
       </Container>

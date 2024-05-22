@@ -3,12 +3,13 @@ import { addressState, currentAddressState } from "./atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationArrow, faWind, faDroplet } from "@fortawesome/free-solid-svg-icons";
+import { faLocationArrow, faWind, faDroplet, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 const API_KEY = "341611f95d76874b2e5d207c40a6b07f";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   font-family: 'Open Sans', Arial, sans-serif;
   font-weight: 600;
   padding: 12px;
@@ -117,6 +118,16 @@ const WeatherBox = styled(Box)`
   margin-bottom: 15px;
 `;
 
+const Spinner = styled(motion.div)`
+  font-size: 70px;
+  color: #70ccfe;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100px;
+  position: sticky;
+`;
+
 function Weather() {
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
@@ -152,7 +163,16 @@ function Weather() {
   }
 
   if (!weatherData) {
-    return <div>Loading...</div>;
+    return (
+      <Spinner 
+        initial={{ rotate: 0 }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity }}  
+      >
+        <FontAwesomeIcon icon={faSpinner} />
+      </Spinner>
+      
+    );
   }
 
   const weatherIconCode = weatherData.weather[0].icon;
@@ -166,7 +186,12 @@ function Weather() {
   const roundedTempMin = Math.round(weatherData.main.temp_min);
   
   return (
-    <Container>
+    <Container 
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 20, opacity: 0 }}
+      transition={{ duration: 1 }}
+    >
       <Row id="address_weather">
         <Box>
           <Address>{currentAddress.region2} {currentAddress.region3}<Icon icon={faLocationArrow} /></Address>

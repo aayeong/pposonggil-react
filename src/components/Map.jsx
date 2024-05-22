@@ -11,28 +11,31 @@ import SearchBox from './SearchBox';
 const { kakao } = window;
 
 const BtnContainer = styled.div`
-  width: 100%;
-  padding: 0px 12px 12px 12px;
+  /* width: auto; */
   z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  bottom: 0;
-  right: 0;
-  position: sticky;
+  bottom: 15px;
+  right: 15px;
+  position: absolute;
 `;
 
 const LocationBtn = styled(motion.button)`
   all: unset;
-  margin-top: 12px;
+  margin-top: 15px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  position: sticky;
   border-radius: 50%;
   background-color: white;
   padding: 10px;
-  font-size: 20px;
+  font-size: 22px;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
   cursor: ${props => (props.isLoading ? 'not-allowed' : 'pointer')};
 `;
@@ -48,7 +51,6 @@ const Icon = styled(FontAwesomeIcon)`
 `;
 
 const KakaoMap = styled.div`
-  /* position: relative; */
   width: 100%;
   height: 50vh;
 `;
@@ -257,7 +259,7 @@ function Map() {
   console.log("위치 추적 주소는: ", currentAddress);
   return (
     <KakaoMap id="map" ref={mapRef}>
-      <SearchBox></SearchBox>
+      <SearchBox />
       <BtnContainer>
         <GridBtn
           id="grid"

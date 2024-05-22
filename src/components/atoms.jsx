@@ -47,3 +47,7 @@ export const gridState = atom({
   default: true,
 })
 
+export const navState = atom({
+  key: "navState",
+  defualt: "weather",
+})

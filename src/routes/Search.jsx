@@ -14,8 +14,8 @@ function Search() {
   return (
     <React.Fragment>
       <Header />
-        <Wrapper>
-          
+        <Wrapper> 
+          <div>Search 화면</div>
         </Wrapper>
       <Navigation />
     </React.Fragment>
