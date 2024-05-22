@@ -13,7 +13,6 @@ const HeaderWrapper= styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  //상단 고정
   position: fixed;
   top: 0;
   left: 0;
@@ -21,6 +20,7 @@ const HeaderWrapper= styled.div`
   width: 100%;
   height: 70px;
   z-index: 1000;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
 const HeaderCol = styled.div`
   width: 20%;

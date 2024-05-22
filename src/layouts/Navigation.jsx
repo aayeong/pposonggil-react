@@ -1,9 +1,13 @@
 import React from "react";
 import { Link, useLocation } from 'react-router-dom';
+import { useSetRecoilState } from "recoil";
+
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faCloud, faUmbrella, faBookmark, faUser } from "@fortawesome/free-solid-svg-icons";
+
+import { navState } from "../components/atoms";
 
 const Nav = styled.div`
   outline: none;
@@ -58,6 +62,7 @@ function Navigation() {
           <Item
             key={item.to}
             isActive={location.pathname === item.to}
+            
           >
             <Link to={item.to}>
               <NavIcon whileTap={{ scale: 0.85 }}>
