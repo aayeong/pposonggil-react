@@ -183,7 +183,7 @@ const Btn = styled.button`
 function SearchBox() {
   const mapCenterAddress = useRecoilValue(mapCenterState);
   const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
-
+  const navigate = useNavigate();
   //검색창 placeholder 내용 동적 변경
   useEffect(() => {
     if (mapCenterAddress.depth2 && mapCenterAddress.depth3) {
