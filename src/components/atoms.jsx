@@ -49,7 +49,7 @@ export const gridState = atom({
 
 export const navState = atom({
   key: "navState",
-  defualt: "weather",
+  default: "home",
 })
 
 export const routeInfo = atom({

@@ -125,6 +125,8 @@ const Spinner = styled(motion.div)`
   justify-content: center;
   align-items: center;
   z-index: 100px;
+  margin-top: 40px;
+  overflow-y: hidden;
   position: sticky;
 `;
 

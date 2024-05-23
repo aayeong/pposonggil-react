@@ -120,7 +120,7 @@ import { addressState, locationBtnState, mapCenterState, markerState } from "./a
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faBars } from "@fortawesome/free-solid-svg-icons";
 
 const SearchContainer = styled.div`
   display: flex;
@@ -166,6 +166,7 @@ const Input = styled(motion.input)`
 
 const Icon = styled(FontAwesomeIcon)`
   margin: 0px 20px 0px 10px ;
+  cursor: pointer;
 `;
 
 const Btn = styled.button`
@@ -200,14 +201,20 @@ function SearchBox() {
     navigate('/search');
   };
 
+  const clickedIcon = (e) => {
+    //왼쪽에서 오른쪽으로 화면 절반정도 뽀송길 설명 페이지 토글되게
+    //새로운 화면 아니고 map위에 zindex값으로 레이아웃처럼 위로 뜨게.
+    //atom값으로 State 값 변경하고 Map.js에서 띄우는 걸로..!
+  };
+
   return (
     <SearchContainer>
       <Container>
-        <Icon icon={faMagnifyingGlass} />
+        <Icon icon={faBars} onClick={clickedIcon}/>
         <AnimatePresence>
           <Input
             type="text"
-            onChange={onChange}
+            // onChange={onChange}
             placeholder={placeholderText}
             key={placeholderText}
             initial={{ opacity: 0 }}

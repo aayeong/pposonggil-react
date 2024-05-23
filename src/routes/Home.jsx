@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
@@ -7,6 +7,7 @@ import SearchBox from "../components/SearchBox";
 import Weather from "../components/Weather";
 
 const ContentBox = styled(motion.div)`
+  overflow-x: hidden;
   overflow-y: scroll;
   display: box;
   justify-content: center;
@@ -22,11 +23,14 @@ const ContentBox = styled(motion.div)`
 
 const ToggleBar = styled.div`
   width: 100%;
-  height: 6px;
-  margin-top: 15px;
+  height: 20px;
+  padding: 15px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: sticky;
+  top:0;
+  background-color: whitesmoke;
 `;
 
 const Bar = styled.div`
@@ -42,10 +46,16 @@ const MapBox = styled(motion.div)`
 
 function Home() {
   const [slideUp, setSlideUp] = useState(true);
+  const contentBoxRef = useRef(null); // ref 생성
 
   const changeHeight = useCallback(() => {
     setSlideUp(prev => !prev);
-  }, []);
+    // ContentBox의 scrollTop을 0으로 설정하여 스크롤 최상단으로 이동
+    if (contentBoxRef.current) {
+      contentBoxRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+  }, [slideUp]);
 
   return (
     <React.Fragment>
@@ -65,6 +75,7 @@ function Home() {
         animate={{ height: slideUp ? "40%" : "20%" }}
         transition={{ duration: 0.3 }}
         onClick={changeHeight}
+        ref={contentBoxRef}
       >
         <ToggleBar><Bar /></ToggleBar>
         <Weather />
