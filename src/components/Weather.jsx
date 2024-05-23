@@ -13,6 +13,7 @@ const Container = styled(motion.div)`
   font-family: 'Open Sans', Arial, sans-serif;
   font-weight: 600;
   padding: 12px;
+  padding-top: 6px;
   height: 100%;
   width: 100%;
   display: block;
@@ -32,7 +33,7 @@ const Box = styled.div`
   border-radius: 22px;
   width: 70%;
   margin: 10px;
-  padding: 12px;;
+  padding: 12px;
 `;
 
 const IconBox = styled(Box)`
@@ -56,7 +57,6 @@ const Row = styled.div`
     box-shadow: 0px 0px 10px 3px rgba(109, 109, 109, 0.1);
     border-radius: 25px;
     margin: 0px 10px;
-    margin-top: 5px;
   }
 `;
 
@@ -119,15 +119,14 @@ const WeatherBox = styled(Box)`
 `;
 
 const Spinner = styled(motion.div)`
-  font-size: 70px;
+  font-size: 40px;
   color: #70ccfe;
   display:flex;
   justify-content: center;
   align-items: center;
-  z-index: 100px;
-  margin-top: 40px;
+  z-index: 200px;
+  margin-top: 50px;
   overflow-y: hidden;
-  position: sticky;
 `;
 
 function Weather() {
@@ -196,7 +195,11 @@ function Weather() {
     >
       <Row id="address_weather">
         <Box>
-          <Address>{currentAddress.region2} {currentAddress.region3}<Icon icon={faLocationArrow} /></Address>
+          <Address>
+            <p style={{color:"#216CFF", marginBottom: "5px"}}>현재 위치</p>
+            {currentAddress.depth2} {currentAddress.depth3}
+            <Icon icon={faLocationArrow} />
+          </Address>
           <Temp>{roundedTemp}°</Temp>
           <TempBox>
             <WeatherInfo><span style={{ color: "gray" }}>체감</span> {roundedFeelsLike}°</WeatherInfo></TempBox>

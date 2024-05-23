@@ -467,7 +467,7 @@ const RouteInfo = styled.div`
   font-weight: 500;
 `;
 
-function Search() {
+function SearchRoute() {
   const [startInputText, setStartInputText] = useState("");
   const [endInputText, setEndInputText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -540,6 +540,7 @@ function Search() {
 
   return (
     <React.Fragment>
+      <div>search/routes 페이지 입니다</div>
       <SearchContainer>
         <Container>
           <Input
@@ -581,5 +582,5 @@ function Search() {
   );
 }
 
-export default Search;
+export default SearchRoute;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { addressState, currentAddressState, routeInfo } from "./atoms";
+import { addressState, currentAddressState, locationBtnState, routeInfo } from "./atoms";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import styled from "styled-components";
@@ -13,6 +13,7 @@ const Container = styled(motion.div)`
   font-family: 'Open Sans', Arial, sans-serif;
   font-weight: 600;
   padding: 12px;
+  padding-top: 6px;
   height: 100%;
   width: 100%;
   display: block;
@@ -51,7 +52,7 @@ const Icon = styled(FontAwesomeIcon)`
   width: 25px;
   height: 25px;
   padding: 20px;
-  background-color: #216CFF;
+  background-color: #003E5E;
   border-radius: 50%;
   color: white;
 `;
@@ -96,14 +97,19 @@ function PlaceInfo() {
   const navigate = useNavigate();
   const setRouteInfo = useSetRecoilState(routeInfo);
   const currentAddress = useRecoilValue(currentAddressState);
-
+  const locationBtn = useRecoilValue(locationBtnState); 
   const test = useRecoilValue(routeInfo);
 
 
   useEffect(() => {
+    if(locationBtn) {
+      setPlace(currentAddress.addressName);
+      setDepth3(currentAddress.depth3);
+    } else {
     setPlace(address.roadAddressName);
     setDepth3(address.depth3);
-  }, [address]);
+    }
+  }, [address, locationBtn]);
 
   const onStartClick = () => {
     setRouteInfo({ start: place, end: "" });
@@ -128,9 +134,14 @@ function PlaceInfo() {
     >
       <Row id="address_weather">
         <Box>
-          <Address><FontAwesomeIcon icon={faLocationDot}/> {place}</Address>
+          <Address><FontAwesomeIcon icon={faLocationDot} style={{color: "#216CFF"}}/> {place}</Address>
           <AddressBox>
-            <Info><span style={{ color: "#5f5f5f" }}>{place} ({depth3})</span></Info>
+            <Info>
+              <span style={{ color: "#5f5f5f" }}>
+              {/* {marker ? <PlaceInfo /> : <Weather />} */}
+                {place} ({depth3})
+              </span>
+            </Info>
           </AddressBox>
           <AddressBox>
             <Btn onClick={onStartClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>

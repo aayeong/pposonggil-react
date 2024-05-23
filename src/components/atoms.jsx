@@ -25,7 +25,7 @@ export const currentAddressState = atom({
   default: { 
     depth2: "", //구
     depth3: "", //동
-    addressName: "", //지번 주소
+    addressName: "", //지번 주소(도로명 없는 경우도 있어서 지번으로)
   }
 })
 
@@ -47,15 +47,23 @@ export const gridState = atom({
   default: true,
 })
 
+//현재 네비게이션 위치 상태 추적 atom
 export const navState = atom({
   key: "navState",
   default: "home",
 })
 
+//경로의 출발지 도착지 저장 atom
 export const routeInfo = atom({
   key: "routeInfo",
   default: {
     start: "",
     end: "",
   }
+})
+
+//검색 장소 저장 atom
+export const searchPlace = atom({
+  key: "searchPlace",
+  default: "",
 })

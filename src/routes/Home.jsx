@@ -6,6 +6,8 @@ import Map from "../components/Map";
 import SearchBox from "../components/SearchBox";
 import Weather from "../components/Weather";
 import PlaceInfo from "../components/PlaceInfo";
+import { useRecoilState } from "recoil";
+import { gridState, locationBtnState, markerState } from "../components/atoms";
 
 const ContentBox = styled(motion.div)`
   overflow-x: hidden;
@@ -42,17 +44,17 @@ const Bar = styled.div`
 `;
 
 const MapBox = styled(motion.div)`
-  width: 100%;
+  /* width: 100%; */
 `;
 
 function Home() {
   const [slideUp, setSlideUp] = useState(true);
-  const contentBoxRef = useRef(null); // ref 생성
+  const contentBoxRef = useRef(null);
+
+  const [marker, setMarker] = useRecoilState(markerState);
 
   const changeHeight = useCallback(() => {
-    //ContentBox의 Content가 Weather일 경우에만 토글되게 수정
     setSlideUp(prev => !prev);
-    // ContentBox의 scrollTop을 0으로 설정하여 스크롤 최상단으로 이동
     if (contentBoxRef.current) {
       contentBoxRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -80,9 +82,7 @@ function Home() {
         ref={contentBoxRef}
       >
         <ToggleBar><Bar /></ToggleBar>
-        {/* 이부분 hidden 옵션으로 컨트롤하기. */}
-        {/* <Weather /> */}
-        <PlaceInfo></PlaceInfo>
+        {marker ? <PlaceInfo /> : <Weather />}
       </ContentBox>
     </React.Fragment>
   );

@@ -1,117 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { useRecoilValue, useRecoilState } from "recoil";
-// import { addressState, currentAddressState, locationBtnState } from "./atoms";
-
-// import styled from "styled-components";
-// import { motion, AnimatePresence } from "framer-motion";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
-// const SearchContainer = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin: 12px 0px;
-//   width: 100%;
-//   z-index: 100;
-//   position: absolute;
-// `;
-
-// const Container = styled.div`
-//   width: 85%;
-//   height: 45px;
-//   background-color: whitesmoke;
-//   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
-//   padding: 0px 20px;
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//   border-radius: 5px;
-//   padding: 12px;
-//   margin: 0px 12px;
-//   &:last-child { //버튼 컨테이너
-//     width: 15%;
-//     padding: 0px;
-//     margin-left: 0px;
-//     justify-content: flex-end;
-//   }
-// `;
-
-// const Input = styled(motion.input)`
-//   text-align: left;
-//   width: 100%;
-//   height: 100%;
-//   font-size: 17px;
-//   border: none;
-//   background-color: whitesmoke;
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
-// const Icon = styled(FontAwesomeIcon)`
-//   margin: 0px 20px 0px 10px ;
-// `;
-
-// const Btn = styled.button`
-//   border: none;
-//   cursor: pointer;
-//   text-align: center;
-//   background-color: skyblue;
-//   width: 100%;
-//   height: 100%;
-//   border-radius: 5px;
-//   font-size: 14px;
-//   font-weight: 600;
-// `;
-
-// function SearchBox() {
-//   const address = useRecoilValue(addressState);
-//   const currentAddress = useRecoilValue(currentAddressState);
-
-//   const [locationBtnStateValue, setLocationBtnStateValue] = useRecoilState(locationBtnState);
-//   const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
-
-//   useEffect(() => {
-//     if (locationBtnStateValue === true) {
-//       setPlaceholderText(`${currentAddress.region2} ${currentAddress.region3}`);
-//     } else {
-//       setPlaceholderText("장소·주소 검색");
-//     }
-//   }, [locationBtnStateValue, currentAddress]);
-
-//   const handleChange = (e) => {
-//     setPlaceholderText(e.target.value);
-//   };
-
-//   return (
-//     <SearchContainer>
-//       <Container>
-//         <Icon icon={faMagnifyingGlass} />
-//         <AnimatePresence>
-//           <Input
-//             type="text"
-//             onChange={handleChange}
-//             placeholder={placeholderText}
-//             key={placeholderText}
-//             initial={{ opacity: 0 }} // 초기 상태 설정
-//             animate={{ opacity: 1 }} // 애니메이션 적용
-//             transition={{ duration: 0.8 }} // 애니메이션 지속 시간
-//           />
-//         </AnimatePresence>
-//       </Container>
-
-//       <Container>
-//         <Btn>
-//           길찾기
-//         </Btn>
-//       </Container>
-//     </SearchContainer>
-//   );
-// }
-
-// export default SearchBox;
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
@@ -165,8 +51,12 @@ const Input = styled(motion.input)`
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  margin: 0px 20px 0px 10px ;
+  /* margin: 0px 20px 0px 10px ; */
   cursor: pointer;
+  padding: 10px;
+  &:first-child {
+    margin-right: 5px;
+  }
 `;
 
 const Btn = styled.button`
@@ -182,23 +72,12 @@ const Btn = styled.button`
   color: white;
 `;
 
-const HiddenScreen = styled.div`
-  display: ${(props) => (props.visible ? "block" : "none")};
-  position: absolute;
-  top: 40px;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-`;
 
 function SearchBox() {
   const mapCenterAddress = useRecoilValue(mapCenterState);
   const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
-  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+
   //검색창 placeholder 내용 동적 변경
   useEffect(() => {
     if (mapCenterAddress.depth2 && mapCenterAddress.depth3) {
@@ -214,14 +93,20 @@ function SearchBox() {
     navigate('/search');
   };
 
-  const clickedIcon = (e) => {
+  const clickedBars = (e) => {
+    //왼쪽에서 오른쪽으로 화면 절반정도 뽀송길 설명 페이지 토글되게
+    //새로운 화면 아니고 map위에 zindex값으로 레이아웃처럼 위로 뜨게.
+    //atom값으로 State 값 변경하고 Map.js에서 띄우는 걸로..!
+  };
+
+  const clickedSearch = (e) => {
     //왼쪽에서 오른쪽으로 화면 절반정도 뽀송길 설명 페이지 토글되게
     //새로운 화면 아니고 map위에 zindex값으로 레이아웃처럼 위로 뜨게.
     //atom값으로 State 값 변경하고 Map.js에서 띄우는 걸로..!
   };
 
   const handleInputClick = () => {
-    setIsVisible(true);  
+    navigate("/search");
   }
 
   return (
@@ -229,9 +114,12 @@ function SearchBox() {
 
     <SearchContainer>
       <Container>
-        <Icon icon={faBars} onClick={clickedIcon}/>
+        <Icon 
+          icon={faBars} 
+          onClick={clickedBars}
+        />
         <AnimatePresence>
-          <Input
+          <Input 
             type="text"
             onClick={handleInputClick}
             placeholder={placeholderText}
@@ -241,6 +129,10 @@ function SearchBox() {
             transition={{ duration: 0.8 }}
           />
         </AnimatePresence>
+        <Icon 
+          icon={faMagnifyingGlass} 
+          onClick={clickedSearch}
+        />
       </Container>
 
       <Container>
@@ -248,9 +140,6 @@ function SearchBox() {
           길찾기
         </Btn>
       </Container>
-    </SearchContainer>
-    <SearchContainer>
-      <HiddenScreen visible={isVisible} ></HiddenScreen>
     </SearchContainer>
     </React.Fragment>
 

@@ -111,8 +111,8 @@ function Map() {
             geocoder.current.coord2Address(lon, lat, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 setCurrentAddress({
-                  region2: result[0].address.region_2depth_name,
-                  region3: result[0].address.region_3depth_name,
+                  depth2: result[0].address.region_2depth_name,
+                  depth3: result[0].address.region_3depth_name,
                   addressName: result[0].address.address_name,
                 });
               }

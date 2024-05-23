@@ -46,7 +46,7 @@ const Item = styled(motion.li)`
 
 const NavIcon = styled(motion.div)`
   font-size: 25px;
-  color: ${(props) => (props.isActive ? "#003E5E" : "#424242")}; /* Change color when active */
+  color: ${(props) => (props.isActive ? "#003E5E" : "#4a4a4a")}; /* Change color when active */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,6 +58,7 @@ const NavStateBar = styled(motion.div)`
   width: 100%;
   height: 4px;
   background-color: #003E5E;
+  /* background-color: #41bbf8; */
   position: absolute;
   top: 0px;
 `;
