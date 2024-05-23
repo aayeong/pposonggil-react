@@ -64,7 +64,7 @@ const RainBtn =styled(LocationBtn)`
 
 const KakaoMap = styled.div`
   width: 100%;
-  height: 50vh;
+  height: 100%;
 `;
 
 function Map() {
