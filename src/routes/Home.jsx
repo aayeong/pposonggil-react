@@ -50,6 +50,7 @@ function Home() {
   const contentBoxRef = useRef(null); // ref 생성
 
   const changeHeight = useCallback(() => {
+    //ContentBox의 Content가 Weather일 경우에만 토글되게 수정
     setSlideUp(prev => !prev);
     // ContentBox의 scrollTop을 0으로 설정하여 스크롤 최상단으로 이동
     if (contentBoxRef.current) {

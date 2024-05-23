@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
-import { currentAddressState } from "../components/atoms";
+import { currentAddressState, routeInfo } from "../components/atoms";
 
 
 const SearchContainer = styled.div`
@@ -113,6 +113,7 @@ const RouteInfo = styled.div`
 
 function Search() {
   const curAddr = useRecoilValue(currentAddressState);
+  const [startEnd, setStartEnd] = useRecoilState(routeInfo);
 
   const isReverseBtnClicked = useState(false);
   const isResetBtnClicked = useState(false);
