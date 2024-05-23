@@ -182,9 +182,22 @@ const Btn = styled.button`
   color: white;
 `;
 
+const HiddenScreen = styled.div`
+  display: ${(props) => (props.visible ? "block" : "none")};
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+`;
+
 function SearchBox() {
   const mapCenterAddress = useRecoilValue(mapCenterState);
   const [placeholderText, setPlaceholderText] = useState("장소·주소 검색");
+  const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
   //검색창 placeholder 내용 동적 변경
   useEffect(() => {
@@ -207,14 +220,20 @@ function SearchBox() {
     //atom값으로 State 값 변경하고 Map.js에서 띄우는 걸로..!
   };
 
+  const handleInputClick = () => {
+    setIsVisible(true);  
+  }
+
   return (
+    <React.Fragment>
+
     <SearchContainer>
       <Container>
         <Icon icon={faBars} onClick={clickedIcon}/>
         <AnimatePresence>
           <Input
             type="text"
-            // onChange={onChange}
+            onClick={handleInputClick}
             placeholder={placeholderText}
             key={placeholderText}
             initial={{ opacity: 0 }}
@@ -230,6 +249,11 @@ function SearchBox() {
         </Btn>
       </Container>
     </SearchContainer>
+    <SearchContainer>
+      <HiddenScreen visible={isVisible} ></HiddenScreen>
+    </SearchContainer>
+    </React.Fragment>
+
   );
 }
 

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Map from "../components/Map";
 import SearchBox from "../components/SearchBox";
 import Weather from "../components/Weather";
+import PlaceInfo from "../components/PlaceInfo";
 
 const ContentBox = styled(motion.div)`
   overflow-x: hidden;
@@ -61,8 +62,8 @@ function Home() {
     <React.Fragment>
       <MapBox
         layout
-        initial={{ height: "80%" }}
-        animate={{ height: slideUp ? "60%" : "80%" }}
+        initial={{ height: "70%" }}
+        animate={{ height: slideUp ? "60%" : "70%" }}
         transition={{ duration: 0.3 }}
       >
         <Map>
@@ -71,14 +72,16 @@ function Home() {
       </MapBox>
       <ContentBox
         layout
-        initial={{ height: "20%" }}
-        animate={{ height: slideUp ? "40%" : "20%" }}
+        initial={{ height: "30%" }}
+        animate={{ height: slideUp ? "40%" : "30%" }}
         transition={{ duration: 0.3 }}
         onClick={changeHeight}
         ref={contentBoxRef}
       >
         <ToggleBar><Bar /></ToggleBar>
-        <Weather />
+        {/* 이부분 hidden 옵션으로 컨트롤하기. */}
+        {/* <Weather /> */}
+        <PlaceInfo></PlaceInfo>
       </ContentBox>
     </React.Fragment>
   );
