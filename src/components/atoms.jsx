@@ -62,8 +62,13 @@ export const routeInfo = atom({
   }
 })
 
-//검색 장소 저장 atom
+//검색 장소 정보 저장 atom
 export const searchPlace = atom({
   key: "searchPlace",
-  default: "",
+  default: {
+    placeName: "",
+    address: "",
+    roadAddress: "",
+    phone: "",
+  }
 })

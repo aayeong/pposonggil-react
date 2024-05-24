@@ -5,7 +5,8 @@ import { addressState, currentAddressState, gridState, locationBtnState, mapCent
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationCrosshairs, faSpinner, faBorderAll , faCloudShowersHeavy} from "@fortawesome/free-solid-svg-icons";
+import { faLocationCrosshairs, faSpinner, faBorderAll , faCloudShowersHeavy, faL} from "@fortawesome/free-solid-svg-icons";
+
 import SearchBox from './SearchBox';
 
 const { kakao } = window;
@@ -86,6 +87,10 @@ function Map() {
 
   // 지도 생성
   useEffect(() => {
+    setActiveMarker();
+    setActiveTracking();
+    setActiveGrid();
+
     const script = document.createElement('script');
     script.async = true;
     script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=fa3cd41b575ec5e015970670e786ea86&autoload=false";
@@ -161,11 +166,11 @@ function Map() {
     console.log("지도 랜더링")
   }, []);
 
-
+  // 좌표로 주소 검색
   const searchAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
   }, []);
-
+  // 좌표로 상세 주소 검색
   const searchDetailAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2Address(coords.getLng(), coords.getLat(), callback);
   }, []);
@@ -199,7 +204,7 @@ function Map() {
           mapInstance.current.setCenter(locPosition);
           mapInstance.current.setLevel(2);
           setActiveTracking(true);
-          //
+          
           //마커 업데이트
           if (!markerInstance.current) {
             markerInstance.current = new kakao.maps.Marker({
@@ -211,7 +216,7 @@ function Map() {
             markerInstance.current.setMap(mapInstance.current);
           }
           setActiveMarker(true);
-          //
+          
           //현재 위치 주소 정보 currentAddress atom에 저장
           geocoder.current.coord2Address(lon, lat, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
@@ -241,11 +246,9 @@ function Map() {
       if (markerInstance.current) { //마커 있으면 제거
         markerInstance.current.setMap(null);
       }
-
       setActiveTracking(false);// 위치 추적 상태 비활성화로 atom 업데이트
       setActiveMarker(false); //마커 상태 비활성화로 atom 업데이트
       setIsLoading(false);
-      //
     }
   }, [activeTracking]);
 
@@ -265,10 +268,12 @@ function Map() {
     setActiveGrid(prev=> !prev);
     setIsGridLoading(false);
   }, [activeGrid]);
+  
+  // test용
+  // console.log("클릭 위치 주소 정보: ", address);
+  // console.log("맵 중심 위치 주소 정보: ", mapCenterAddress);
+  // console.log("위치 추적 주소는: ", currentAddress);
 
-  console.log("클릭 위치 주소 정보: ", address);
-  console.log("맵 중심 위치 주소 정보: ", mapCenterAddress);
-  console.log("위치 추적 주소는: ", currentAddress);
   return (
     <KakaoMap id="map" ref={mapRef}>
       <SearchBox />

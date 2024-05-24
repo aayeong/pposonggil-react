@@ -66,7 +66,7 @@ function Home() {
       <MapBox
         layout
         initial={{ height: "70%" }}
-        animate={{ height: slideUp ? "60%" : "70%" }}
+        animate={{ height: slideUp ? "55%" : "70%" }}
         transition={{ duration: 0.3 }}
       >
         <Map>
@@ -76,7 +76,7 @@ function Home() {
       <ContentBox
         layout
         initial={{ height: "30%" }}
-        animate={{ height: slideUp ? "40%" : "30%" }}
+        animate={{ height: slideUp ? "45%" : "30%" }}
         transition={{ duration: 0.3 }}
         onClick={changeHeight}
         ref={contentBoxRef}
