@@ -66,9 +66,12 @@ export const routeInfo = atom({
 export const searchPlace = atom({
   key: "searchPlace",
   default: {
-    placeName: "",
-    address: "",
-    roadAddress: "",
+    place_name: "",
+    category_group_name: "",
+    address_name: "",
+    road_address_name: "",
     phone: "",
+    x: "",
+    y: "",
   }
 })

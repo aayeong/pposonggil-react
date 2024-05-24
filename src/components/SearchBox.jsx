@@ -12,7 +12,7 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0px;
+  padding: 20px 0px;
   width: 100%;
   z-index: 100;
   position: sticky;
@@ -23,7 +23,7 @@ const Container = styled.div`
   height: 45px;
   background-color: whitesmoke;
   box-shadow: 0px 0px 5px 4px rgba(109, 109, 109, 0.15);
-  padding: 0px 20px;
+  /* padding: 0px 20px; */
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -44,7 +44,7 @@ const Input = styled(motion.input)`
   height: 100%;
   font-size: 17px;
   border: none;
-  background-color: whitesmoke;
+  background-color: inherit;
   &:focus {
     outline: none;
   }
@@ -90,7 +90,7 @@ function SearchBox() {
   };
 
   const handleSearchBtn = () => {
-    navigate('/search');
+    navigate('/search/routes');
   };
 
   const clickedBars = (e) => {

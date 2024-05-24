@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 
 import SearchRoute from './routes/SearchRoute';
+import SearchRoutes from './routes/SearchRoutes';
 import SearchPlace from './routes/SearchPlace';
 import Search from './routes/Search';
 import Home from './routes/Home';
@@ -27,9 +28,9 @@ function App() {
       <Header />
       <Wrapper>
         <Routes>
-          <Route path="/search/routes" element={<SearchRoute />} />
-    
-          <Route path="/search" element={<SearchPlace />} />
+          <Route path="/search/routes" element={<SearchRoutes />} />
+          <Route path="/search/place" element={<SearchPlace />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/market" element={<Market />} />
           <Route path="/home" element={<Home />} />
           {/* 로그인 페이지로 수정 필요 */}

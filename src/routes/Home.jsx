@@ -48,7 +48,7 @@ const MapBox = styled(motion.div)`
 `;
 
 function Home() {
-  const [slideUp, setSlideUp] = useState(true);
+  const [slideUp, setSlideUp] = useState(false);
   const contentBoxRef = useRef(null);
 
   const [marker, setMarker] = useRecoilState(markerState);
@@ -67,7 +67,7 @@ function Home() {
         layout
         initial={{ height: "70%" }}
         animate={{ height: slideUp ? "55%" : "70%" }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
       >
         <Map>
           <SearchBox />
@@ -77,7 +77,7 @@ function Home() {
         layout
         initial={{ height: "30%" }}
         animate={{ height: slideUp ? "45%" : "30%" }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.4 }}
         onClick={changeHeight}
         ref={contentBoxRef}
       >

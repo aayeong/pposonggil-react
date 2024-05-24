@@ -1,438 +1,77 @@
-// import React, { useEffect, useState, useCallback } from "react";
-// import { useRecoilState, useRecoilValue } from "recoil";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { searchPlace } from "../components/atoms";
 
-// import styled from "styled-components";
-// import { motion } from "framer-motion";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
-
-// import { currentAddressState, routeInfo } from "../components/atoms";
-
-
-// const SearchContainer = styled.div`
-//   position: sticky;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   margin: 20px 0px;
-//   width: 100%;
-//   &:last-child {
-//     margin-top: -10px;
-//   }
-// `;
-
-// const Container = styled.div`
-//   width: 65%;
-//   height: 45px;
-//   background-color: whitesmoke;
-//   padding: 0px 20px;
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//   border-radius: 15px;
-//   padding: 12px;
-//   margin: 0px 5px;
-//   &:last-child { //버튼
-//     width: 10%;
-//     background-color: #003E5E;
-//     justify-content: flex-end;
-//     color: white;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     cursor: pointer;
-//   }
-// `;
-
-// const Input = styled(motion.input)`
-//   text-align: left;
-//   width: 100%;
-//   height: 100%;
-//   font-size: 17px;
-//   border: none;
-//   background-color: whitesmoke;
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
-// const ResultContainer = styled.div`
-//   background-color: whitesmoke;
-//   min-height: 65vh;
-//   width: 100%;
-//   max-height: 65vh;
-//   overflow-y: scroll;
-//   bottom: 70px;
-//   left: 0;
-//   right: 0;
-// `;
-
-// const Icon = styled(FontAwesomeIcon)`
-//   width: 22px;
-//   height: 22px;
-// `;
-
-// const SearchedRoute = styled.div`
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//   padding: 10px 20px;
-//   height: auto;
-//   min-height: 45px;
-//   color: black;
-//   font-weight: 300;
-//   font-size: 16px;
-//   border-bottom: 0.5px solid #aeaeae99;
-//   background-color: white;
-// `;
-
-// const RouteIcon = styled(FontAwesomeIcon)`
-//   color: white;
-//   width: 12px;
-//   height: 12px;
-//   padding: 10px;
-//   background-color: #a3a3a3;
-//   border-radius: 50%;
-// `;
-
-// const optionIcon = styled(FontAwesomeIcon)`
-  
-// `;
-
-// const Box = styled.div`
-//   background-color: #88d5ff35;
-//   width: 100%;
-//   height: 45px;
-// `;
-
-// const RouteInfo = styled.div`
-//   margin: 0px 20px;
-//   font-weight: 500;
-// `;
-
-
-// function Search() {
-//   const curAddr = useRecoilValue(currentAddressState);
-//   const [startEnd, setStartEnd] = useRecoilState(routeInfo);
-
-//   const isReverseBtnClicked = useState(false);
-//   const isResetBtnClicked = useState(false);
-//   const [startInputText, setStartInputText] = useState(curAddr.addressName);
-//   const [endInputText, setEndInputText] = useState("");
-
-//   const handleStartInputChange = (event) => {
-//     setStartInputText(event.target.value);
-//   };
-
-//   const handleEndInputChange = (event) => {
-//     setEndInputText(event.target.value);
-//   };
-
-//   const handleReverseBtn = useCallback(() => {
-//     console.log("목적지 출발지 전환");
-//     setStartInputText(endInputText);
-//     setEndInputText(startInputText);
-//   }, [isReverseBtnClicked]);
-
-//   const handleResetBtn = useCallback(() => {
-//     console.log("입력 장소 초기화");
-//     setStartInputText(curAddr.addressName);
-//     setEndInputText("");
-//   }, [isResetBtnClicked]);
-
-  
-//   return (
-//     <React.Fragment>
-//       <SearchContainer>
-//         <Container>
-//           <Input
-//             type="text"
-//             value={startInputText}
-//             onChange={handleStartInputChange}
-//             placeholder={curAddr.addressName}
-//           />
-//         </Container>
-//         <Container>
-//           <Icon onClick={handleReverseBtn} icon={faRotate} />
-//         </Container>
-//       </SearchContainer>
-//       <SearchContainer>
-//         <Container>
-//           <Input
-//             type="text"
-//             value={endInputText}
-//             onChange={handleEndInputChange}
-//             placeholder="도착지 입력"
-//           />
-//         </Container>
-//         <Container>
-//           <Icon onClick={handleResetBtn} icon={faEllipsisVertical} />   
-//         </Container>
-//       </SearchContainer>
-//       <Box></Box>
-//       <ResultContainer>
-//         {/* map으로 로컬 스토리지에 저장된 검색 기록 리스트 업 하기*/}
-//         <SearchedRoute>
-//           <RouteIcon icon={faClockRotateLeft}/>
-//           <RouteInfo>숭실대학교 ~ 숭실대학교 정보과학관</RouteInfo>
-//         </SearchedRoute>
-
-        
-
-//       </ResultContainer>
-//     </React.Fragment>
-//   )
-// }
-
-// export default Search
-
-// import React, { useState, useCallback, useEffect } from "react";
-// import styled from "styled-components";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
-
-// const { kakao } = window;
-
-// const SearchContainer = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 10px;
-// `;
-
-// const Container = styled.div`
-//   width: 45%;
-// `;
-
-// const Input = styled.input`
-//   width: 100%;
-//   padding: 10px;
-//   font-size: 16px;
-//   border-radius: 5px;
-//   border: 1px solid #ccc;
-// `;
-
-// const ResultContainer = styled.div`
-//   background-color: #f9f9f9;
-//   padding: 10px;
-// `;
-
-// const SearchedRoute = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding: 5px;
-//   border-bottom: 1px solid #ccc;
-// `;
-
-// const RouteIcon = styled(FontAwesomeIcon)`
-//   margin-right: 10px;
-// `;
-
-// const RouteInfo = styled.span`
-//   font-size: 16px;
-// `;
-
-// function Search() {
-//   const [startInputText, setStartInputText] = useState("");
-//   const [endInputText, setEndInputText] = useState("");
-//   const [searchResults, setSearchResults] = useState([]);
-//   const [map, setMap] = useState(null);
-//   const [markers, setMarkers] = useState([]);
-//   const [infowindow, setInfowindow] = useState(null);
-
-//   const handleReverseBtn = useCallback(() => {
-//     setStartInputText(endInputText);
-//     setEndInputText(startInputText);
-//   }, [startInputText, endInputText]);
-
-//   const handleResetBtn = useCallback(() => {
-//     setStartInputText("");
-//     setEndInputText("");
-//   }, []);
-
-//   const handleSearch = useCallback(() => {
-//     if (!startInputText && !endInputText) {
-//       return;
-//     }
-
-//     const ps = new kakao.maps.services.Places();
-//     const keyword = `${startInputText} ${endInputText}`.trim();
-
-//     ps.keywordSearch(keyword, (data, status, pagination) => {
-//       if (status === kakao.maps.services.Status.OK) {
-//         setSearchResults(data);
-//       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-//       } else if (status === kakao.maps.services.Status.ERROR) {
-//         alert("검색 결과 중 오류가 발생했습니다.");
-//       }
-//     });
-//   }, [startInputText, endInputText]);
-
-//   useEffect(() => {
-//     const delayDebounceFn = setTimeout(() => {
-//       handleSearch();
-//     }, 300); // 300ms 딜레이
-
-//     return () => clearTimeout(delayDebounceFn);
-//   }, [startInputText, endInputText, handleSearch]);
-
-//   return (
-//     <React.Fragment>
-//       <SearchContainer>
-//         <Container>
-//           <Input
-//             type="text"
-//             value={startInputText}
-//             onChange={(e) => setStartInputText(e.target.value)}
-//             placeholder="출발지 입력"
-//           />
-//         </Container>
-//         <Container>
-//           <FontAwesomeIcon icon={faRotate} onClick={handleReverseBtn} />
-//         </Container>
-//       </SearchContainer>
-//       <SearchContainer>
-//         <Container>
-//           <Input
-//             type="text"
-//             value={endInputText}
-//             onChange={(e) => setEndInputText(e.target.value)}
-//             placeholder="도착지 입력"
-//           />
-//         </Container>
-//         <Container>
-//           <FontAwesomeIcon icon={faEllipsisVertical} onClick={handleResetBtn} />
-//         </Container>
-//       </SearchContainer>
-//       <ResultContainer>
-//         {searchResults.map((result) => (
-//           <SearchedRoute key={result.id}>
-//             <RouteIcon icon={faClockRotateLeft} />
-//             <RouteInfo>{result.place_name}</RouteInfo>
-//           </SearchedRoute>
-//         ))}
-//       </ResultContainer>
-//       <div id="map" style={{ width: "100%", height: "400px" }}></div>
-//     </React.Fragment>
-//   );
-// }
-
-// export default Search;
-
-import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faLocationDot, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 const { kakao } = window;
 
-// const SearchContainer = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 10px;
-// `;
-
-// const Container = styled.div`
-//   width: 45%;
-// `;
-
-// const Input = styled.input`
-//   width: 100%;
-//   padding: 10px;
-//   font-size: 16px;
-//   border-radius: 5px;
-//   border: 1px solid #ccc;
-// `;
-
-// const ResultContainer = styled.div`
-//   background-color: #f9f9f9;
-//   padding: 10px;
-// `;
-
-// const SearchedRoute = styled.div`
-//   display: flex;
-//   align-items: center;
-//   padding: 5px;
-//   border-bottom: 1px solid #ccc;
-//   cursor: pointer;
-// `;
-
-// const RouteIcon = styled(FontAwesomeIcon)`
-//   margin-right: 10px;
-// `;
-
-// const RouteInfo = styled.span`
-//   font-size: 16px;
-// `;
-
-
 const SearchContainer = styled.div`
-  position: sticky;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0px;
+  padding: 20px 0px;
+  padding-bottom: 30px;
   width: 100%;
-  &:last-child {
-    margin-top: -10px;
-  }
+  z-index: 500;
+  background-color: white;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.1);
+  position: relative;
 `;
 
 const Container = styled.div`
-  width: 65%;
+  width: 100%;
   height: 45px;
-  background-color: whitesmoke;
+  background-color: #e9e9e9;
   padding: 0px 20px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   border-radius: 15px;
+  border: 0.1px solid rgba(0, 0, 0, 0.1);
   padding: 12px;
-  margin: 0px 5px;
-  &:last-child { //버튼
-    width: 10%;
-    background-color: #003E5E;
-    justify-content: flex-end;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
+  margin: 0px 20px;
 `;
 
 const Input = styled(motion.input)`
   text-align: left;
   width: 100%;
-  height: 100%;
+  height: 45px;
   font-size: 17px;
   border: none;
-  background-color: whitesmoke;
+  background-color: inherit;
   &:focus {
     outline: none;
   }
 `;
 
+const Icon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  padding: 10px;
+  margin-right: 5px;
+`;
+
 const ResultContainer = styled.div`
   background-color: whitesmoke;
-  min-height: 65vh;
   width: 100%;
-  max-height: 65vh;
   overflow-y: scroll;
-  bottom: 70px;
   left: 0;
   right: 0;
+  height: 90%;
+  padding-bottom: 70px;
+  /* position: absolute; */
+  /* bottom: 0; */
 `;
 
-const Icon = styled(FontAwesomeIcon)`
-  width: 22px;
-  height: 22px;
-`;
-
-const SearchedRoute = styled.div`
+const ResultItem = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  text-align: left;
   padding: 10px 20px;
   height: auto;
   min-height: 45px;
@@ -441,59 +80,62 @@ const SearchedRoute = styled.div`
   font-size: 16px;
   border-bottom: 0.5px solid #aeaeae99;
   background-color: white;
+  transition: background-color 0.3s ease; /* 부드러운 배경색 변경을 위한 트랜지션 */
+  cursor: pointer;
+  &:hover {
+    background-color: #f4f4f486;
+  }
 `;
 
-const RouteIcon = styled(FontAwesomeIcon)`
+const PlaceIcon = styled(FontAwesomeIcon)`
   color: white;
-  width: 12px;
-  height: 12px;
-  padding: 10px;
-  background-color: #a3a3a3;
+  width: 15px;
+  height: 15px;
+  padding: 8px;
+  background-color: #003E5E;
   border-radius: 50%;
 `;
 
-const optionIcon = styled(FontAwesomeIcon)`
-  
-`;
+const HistoryIcon = styled(PlaceIcon)`
+  background-color: gray;
+`; 
 
-const Box = styled.div`
-  background-color: #88d5ff35;
-  width: 100%;
-  height: 45px;
-`;
-
-const RouteInfo = styled.div`
+const PlaceInfo = styled.div`
   margin: 0px 20px;
   font-weight: 500;
 `;
 
+const InfoItem = styled.span`
+  color: #4b4b4b;
+  font-size: 14px;
+  font-weight: 400;
+  &:first-child {
+    font-weight: 600;
+    font-size: 16px;
+    color: black;
+  }
+`;
+
 function Search() {
-  const [startInputText, setStartInputText] = useState("");
-  const [endInputText, setEndInputText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearchingStart, setIsSearchingStart] = useState(true);
-  const [shouldSearch, setShouldSearch] = useState(true);
-
-  const handleReverseBtn = useCallback(() => {
-    setStartInputText(endInputText);
-    setEndInputText(startInputText);
-    setShouldSearch(false);
-  }, [startInputText, endInputText]);
-
-  const handleResetBtn = useCallback(() => {
-    setStartInputText("");
-    setEndInputText("");
-  }, []);
-
+  const [inputText, setInputText] = useState(""); // 검색 입력 텍스트
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과(자동완성 기능)
+  const [searchHistory, setSearchHistory] = useState([]); // 검색 기록(로컬스토리지)
+  const [selectedPlaceInfo, setSelectedPlaceInfo] = useState(null);
+  
+  const setSearchPlace = useSetRecoilState(searchPlace); // 선택한 장소명 atom으로 관리
+  const searchPlaceValue = useRecoilValue(searchPlace);
+  
+  const navigate = useNavigate();
+  // Kakao Maps API를 이용한 검색 함수
   const handleSearch = useCallback(() => {
-    if (!startInputText && !endInputText) {
+    if (!inputText) {
+      setSearchResults([]);
       return;
     }
-
     const ps = new kakao.maps.services.Places();
-    const keyword = isSearchingStart ? startInputText : endInputText;
-
-    ps.keywordSearch(keyword, (data, status, pagination) => {
+    const keyword = inputText;
+    // 장소 검색 객체를 통해 키워드로 장소 검색 요청
+    ps.keywordSearch(keyword, (data, status) => {
       if (status === kakao.maps.services.Status.OK) {
         setSearchResults(data);
       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
@@ -502,84 +144,99 @@ function Search() {
         alert("검색 결과 중 오류가 발생했습니다.");
       }
     });
-  }, [startInputText, endInputText, isSearchingStart]);
+  }, [inputText]);
 
+  // 검색 입력 텍스트 변경 시 딜레이를 두고 검색 수행
   useEffect(() => {
-    if (!shouldSearch) {
-      setShouldSearch(true); // Reset the flag
-      return;
-    }
-
     const delayDebounceFn = setTimeout(() => {
       handleSearch();
-    }, 300); // 300ms delay
+    }, 200);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [startInputText, endInputText, handleSearch, shouldSearch]);
+  }, [inputText, handleSearch]);
 
-  const handleResultClick = (placeName) => {
-    if (isSearchingStart) {
-      setStartInputText(placeName);
-    } else {
-      setEndInputText(placeName);
+  // 컴포넌트가 처음 렌더링될 때 로컬스토리지에서 검색 기록 불러오기
+  useEffect(() => {
+    const savedHistory = localStorage.getItem("searchHistory");
+    if (savedHistory) {
+      setSearchHistory(JSON.parse(savedHistory));
     }
-    setSearchResults([]);
+  }, []);
+
+  // 검색 결과 클릭 시 장소명 로컬스토리지에 저장 및 searchPlace atom 값 업데이트
+  const handleResultClick = (result, index) => {
+    // 선택한 장소명 로컬스토리지에 저장
+    const newHistory = [result, ...searchHistory.filter(item => item !== result)];
+    setSearchHistory(newHistory);
+    localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+
+    // 선택 장소명에 해당하는 상세 정보 atom에 저장
+    setSearchPlace({
+      place_name: result.place_name || result,
+      category_group_name: result.category_group_name,
+      address_name: result.address_name,
+      road_address_name: result.road_address_name,
+      phone: result.phone,
+      x: result.x,
+      y: result.y,
+    });
+    console.log("atom :", searchPlaceValue); //테스트용
+    navigate(`/search/place`);
   };
 
-  const handleStartInputChange = (e) => {
-    setStartInputText(e.target.value);
-    setIsSearchingStart(true);
-    setShouldSearch(true);
+  // 입력 텍스트 변경 핸들러
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
   };
 
-  const handleEndInputChange = (e) => {
-    setEndInputText(e.target.value);
-    setIsSearchingStart(false);
-    setShouldSearch(true);
-  };
+  // 검색 결과가 없을 때 로컬스토리지의 검색 기록을 표시
+  const resultsToShow = searchResults.length > 0 ? searchResults : searchHistory;
+
+// test용
 
   return (
     <React.Fragment>
       <SearchContainer>
         <Container>
+          <Icon icon={faMagnifyingGlass} />
           <Input
             type="text"
-            value={startInputText}
-            onChange={handleStartInputChange}
-            placeholder="출발지 입력"
+            value={inputText}
+            onChange={handleInputChange}
+            placeholder="장소·주소 검색"
           />
         </Container>
-        <Container>
-          <FontAwesomeIcon icon={faRotate} onClick={handleReverseBtn} />
-        </Container>
       </SearchContainer>
-
-      <SearchContainer>
-        <Container>
-          <Input
-            type="text"
-            value={endInputText}
-            onChange={handleEndInputChange}
-            placeholder="도착지 입력"
-          />
-        </Container>
-        <Container>
-          <FontAwesomeIcon icon={faEllipsisVertical} onClick={handleResetBtn} />
-        </Container>
-      </SearchContainer>
-
 
       <ResultContainer>
-        {searchResults.map((result) => (
-          <SearchedRoute key={result.id} onClick={() => handleResultClick(result.place_name)}>
-            <RouteIcon icon={faClockRotateLeft} />
-            <RouteInfo>{result.place_name}</RouteInfo>
-          </SearchedRoute>
+        {resultsToShow.map((result, index) => (
+          <ResultItem 
+            key={index} 
+            onClick={() => handleResultClick(result, index)}
+          >
+            {searchResults.length > 0 ? (
+              <PlaceIcon icon={faLocationDot} />
+            ) : (
+              <HistoryIcon icon={faClockRotateLeft} />
+            )}
+              <PlaceInfo>
+               <InfoItem id="placeName">{result.place_name || result}</InfoItem>
+               
+               {searchResults.length > 0 && (
+                  <>
+                    <InfoItem id="address"><br/>{result.address_name}</InfoItem>
+                    <InfoItem id="roadAddress"><br/>{result.road_address_name}</InfoItem>
+                    <InfoItem id="phoneNumber"><br/>{result.phone}</InfoItem>
+                    <InfoItem id="phoneNumber"><br/>{result.x}</InfoItem>
+                    <InfoItem id="phoneNumber"><br/>{result.y}</InfoItem>
+                  </>
+                )}
+             </PlaceInfo>
+            </ResultItem>
         ))}
       </ResultContainer>
     </React.Fragment>
   );
 }
 
-export default Search;
-
+export default Search
