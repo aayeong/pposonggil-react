@@ -63,6 +63,7 @@ export const routeInfo = atom({
 })
 
 //검색 장소 정보 저장 atom
+// 위경도는 카카오맵 기준 좌표값임
 export const searchPlace = atom({
   key: "searchPlace",
   default: {

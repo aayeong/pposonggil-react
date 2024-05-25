@@ -113,14 +113,14 @@ function PlaceInfo() {
 
   const onStartClick = () => {
     setRouteInfo({ start: place, end: "" });
-    navigate('/search');
+    navigate('/search/routes');
     console.log("경로 출발지: ", test.start); //test용
     console.log("경로 목적지: ", test.end); //test용
   };
 
   const onEndClick = () => {
     setRouteInfo({ start: currentAddress.addressName, end: place });
-    navigate('/search');
+    navigate('/search/routes');
     console.log("경로 출발지: ", test.start); //test용
     console.log("경로 목적지: ", test.end); //test용
   };

@@ -33,6 +33,7 @@ const ToggleBar = styled.div`
   align-items: center;
   position: sticky;
   top:0;
+  margin-bottom: 5px;
   background-color: whitesmoke;
 `;
 
@@ -66,18 +67,16 @@ function Home() {
       <MapBox
         layout
         initial={{ height: "70%" }}
-        animate={{ height: slideUp ? "55%" : "70%" }}
-        transition={{ duration: 0.4 }}
+        animate={{ height: slideUp ? "45%" : "65%" }}
+        transition={{ duration: 0.3 }}
       >
-        <Map>
-          <SearchBox />
-        </Map>
+        <Map/>
       </MapBox>
       <ContentBox
         layout
         initial={{ height: "30%" }}
-        animate={{ height: slideUp ? "45%" : "30%" }}
-        transition={{ duration: 0.4 }}
+        animate={{ height: slideUp ? "55%" : "35%" }}
+        transition={{ duration: 0.3 }}
         onClick={changeHeight}
         ref={contentBoxRef}
       >

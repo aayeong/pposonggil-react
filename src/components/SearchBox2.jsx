@@ -120,7 +120,6 @@ function SearchBox() {
         />
         <AnimatePresence>
           <Input 
-            id="searchBox"
             type="text"
             onClick={handleInputClick}
             placeholder={placeholderText}

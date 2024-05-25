@@ -12,6 +12,8 @@ import Login from './routes/Login';
 import Header from './layouts/Header';
 import Navigation from './layouts/Navigation';
 
+import Map2 from './components/Map2';
+
 
 const Wrapper = styled.div`
   top: 70px;
@@ -33,8 +35,11 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/market" element={<Market />} />
           <Route path="/home" element={<Home />} />
+
           {/* 로그인 페이지로 수정 필요 */}
           <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Map2 />} /> */}
+
         </Routes>      
       </Wrapper>
       <Navigation />

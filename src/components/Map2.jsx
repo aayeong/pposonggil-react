@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState } from './atoms';
+import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState, searchPlace } from '../components/atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationCrosshairs, faSpinner, faBorderAll , faCloudShowersHeavy, faL} from "@fortawesome/free-solid-svg-icons";
 
-import SearchBox from './SearchBox';
+import SearchBox from '../components/SearchBox';
 
 const { kakao } = window;
 
@@ -23,7 +23,7 @@ const BtnContainer = styled.div`
   position: absolute;
 `;
 
-const LocationBtn = styled(motion.button)`
+const Btn = styled(motion.button)`
   all: unset;
   margin-top: 20px;
   display: flex;
@@ -40,35 +40,18 @@ const LocationBtn = styled(motion.button)`
   cursor: ${props => (props.isLoading ? 'not-allowed' : 'pointer')};
 `;
 
-const GridBtn = styled(LocationBtn)`
-  cursor: ${props => (props.isGridLoading ? 'not-allowed' : 'pointer')};
-`;
-
 const Icon = styled(FontAwesomeIcon)`
   width: 22px;
   height: 22px;
   transition: color 0.2s ease;
 `;
 
-const RainBtn =styled(LocationBtn)`
-  margin: 15px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  left: 0;
-  bottom: 0;
-  z-index: 100;
-  position: sticky;
-  color: #d1edff;
-  background-color: gray;
-`;
-
-const KakaoMap = styled.div`
+const Map = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-function Map() {
+function Map2() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGridLoading, setIsGridLoading] = useState(false);
 
@@ -79,11 +62,16 @@ function Map() {
   const [activeTracking, setActiveTracking] = useRecoilState(locationBtnState);
   const [activeMarker, setActiveMarker] = useRecoilState(markerState);
   const [activeGrid, setActiveGrid] = useRecoilState(gridState);
+  const [place, setPlace] = useRecoilState(searchPlace);
   
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
   const geocoder = useRef(null);
+  
+  // 검색 장소 위도 경도 값(마커 표시 위치 값)
+  const lat = parseFloat(place.y); // 위도 값
+  const lng = parseFloat(place.x); // 경도 값
 
   // 지도 생성
   useEffect(() => {
@@ -100,11 +88,29 @@ function Map() {
       kakao.maps.load(() => {
         const container = mapRef.current;
         const options = {
-          center: new kakao.maps.LatLng(37.566826, 126.9786567),
-          level: 8,
+          center: new kakao.maps.LatLng(lat, lng),
+          level: 3,
         };
         mapInstance.current = new kakao.maps.Map(container, options);
         geocoder.current = new kakao.maps.services.Geocoder();
+
+        // 마크업
+        markerInstance.current = new kakao.maps.Marker({
+          position: new kakao.maps.LatLng(lat, lng),
+          map: mapInstance.current,
+        });
+        setActiveMarker(true);
+        // 마크업된 주소 정보 업데이트
+        geocoder.current.coord2Address(lng, lat, (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            const roadAddressName = result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+            setAddress({
+              depth2: result[0].address.region_2depth_name,
+              depth3: result[0].address.region_3depth_name,
+              roadAddressName: roadAddressName,
+            });
+          }
+        });
 
         // 현재 위치 주소 정보 currentAddressState atom에 저장
         if (navigator.geolocation) {
@@ -124,6 +130,7 @@ function Map() {
             });
           });
         }
+
         // 지도 이동 이벤트 리스너 등록
         kakao.maps.event.addListener(mapInstance.current, 'idle', () => {
           searchAddrFromCoords(mapInstance.current.getCenter(), displayCenterInfo);
@@ -201,7 +208,7 @@ function Map() {
           const lon = position.coords.longitude;
           const locPosition = new kakao.maps.LatLng(lat, lon);
 
-          mapInstance.current.setCenter(locPosition);
+          mapInstance.current.panTo(locPosition);
           mapInstance.current.setLevel(2);
           setActiveTracking(true);
           
@@ -252,45 +259,13 @@ function Map() {
     }
   }, [activeTracking]);
 
-  //격자 표시 함수(아직 구현 안함)
-  const handleGridBtn = useCallback(() => {
-    setIsGridLoading(true);
-    //지도 중심 서울 중심으로 이동 및 지도 확대 레벨 변경
-    const seoulPosition = new kakao.maps.LatLng(37.5665, 126.9780);
-    mapInstance.current.setCenter(seoulPosition);
-    mapInstance.current.setLevel(8);
-    
-    if(!activeGrid) {
-      console.log("show grid!");
-    } else {
-      console.log("hide grid!");
-    }
-    setActiveGrid(prev=> !prev);
-    setIsGridLoading(false);
-  }, [activeGrid]);
-  
-  // test용
-  // console.log("클릭 위치 주소 정보: ", address);
-  // console.log("맵 중심 위치 주소 정보: ", mapCenterAddress);
-  // console.log("위치 추적 주소는: ", currentAddress);
 
   return (
-    <KakaoMap id="map" ref={mapRef}>
-      <SearchBox />
-      <RainBtn><Icon icon={faCloudShowersHeavy}/></RainBtn>
+    <React.Fragment>
+       <Map id="map" ref={mapRef}>
+      {/* <SearchBox /> */}
       <BtnContainer>
-        <GridBtn
-          id="grid"
-          onClick={handleGridBtn}
-          isGridLoading={isGridLoading}
-        >
-          <Icon
-            icon={isGridLoading ? faSpinner : faBorderAll}
-            style={{ color: activeGrid ? "tomato" : "#216CFF" }}
-          />
-        </GridBtn>
-
-        <LocationBtn
+        <Btn
           id="location"
           onClick={handleLocationBtn}
           isLoading={isLoading}
@@ -302,13 +277,13 @@ function Map() {
             icon={isLoading ? faSpinner : faLocationCrosshairs}
             style={{ color: activeTracking ? "tomato" : "#216CFF" }}
           />
-        </LocationBtn>
+        </Btn>
       </BtnContainer>
-    </KakaoMap>
+    </Map>
+    </React.Fragment>
+   
+    
   );
 }
 
-export default Map;
-
-
-
+export default Map2;
