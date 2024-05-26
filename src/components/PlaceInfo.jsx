@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { addressState, currentAddressState, locationBtnState, routeInfo } from "./atoms";
+import { addressState, currentAddressState, locationBtnState, routeInfoState } from "./atoms";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import styled from "styled-components";
@@ -91,42 +91,78 @@ const AddressBox = styled.div`
 `;
 
 function PlaceInfo() {
-  const [activeLoc, setActiveLoc] = useState(true);
+  const addr = useRecoilValue(addressState);
+  const curAddr = useRecoilValue(currentAddressState);
+  const locationBtn = useRecoilValue(locationBtnState);
 
-  const address = useRecoilValue(addressState);
-  const [place, setPlace] = useState(""); //마크업된 장소
-  const [depth3, setDepth3] = useState("");
-
-  const setRouteInfo = useSetRecoilState(routeInfo);
-  const currentAddress = useRecoilValue(currentAddressState);
-  const locationBtn = useRecoilValue(locationBtnState); 
-  const test = useRecoilValue(routeInfo);
+  const setRouteInfo = useSetRecoilState(routeInfoState);
 
   const navigate = useNavigate();
-
+  const [place, setPlace] = useState({
+    depth2: "", // 구
+    depth3: "", // 동
+    addr: "", // 지번
+    roadAddr: "", // 도로명
+    lat: "", // 위도
+    lon: "", // 경도
+  });
 
   useEffect(() => {
     if(locationBtn) {
-      setPlace(currentAddress.addressName);
-      setDepth3(currentAddress.depth3);
+      setPlace({
+        depth2: curAddr.depth2,
+        depth3: curAddr.depth3,
+        addr: curAddr.addr,
+        roadAddr: curAddr.roadAddr,
+        lat: curAddr.lat,
+        lon: curAddr.lon,
+      });
     } else {
-    setPlace(address.roadAddressName);
-    setDepth3(address.depth3);
+      setPlace({
+        depth2: addr.depth2,
+        depth3: addr.depth3,
+        addr: addr.addr,
+        roadAddr: addr.roadAddr,
+        lat: addr.lat,
+        lon: addr.lon,
+      });
     }
-  }, [address, locationBtn]);
+  }, [addr, curAddr, locationBtn]);
 
-  const onStartClick = () => {
-    // setRouteInfo({ start: place, end: "" });
+  const onOriginClick = () => {
+    const newOrigin = {
+      name: place.addr,
+      lat: place.lat,
+      lon: place.lon,
+    };
+
+    setRouteInfo((prev) => ({
+      ...prev,
+      origin: [newOrigin],
+    }));
+
     navigate('/search/routes');
-    console.log("경로 출발지: ", test.start); //test용
-    console.log("경로 목적지: ", test.end); //test용
   };
 
-  const onEndClick = () => {
-    // setRouteInfo({ start: currentAddress.addressName, end: place });
+  const onDestClick = () => {
+    const newDest = {
+      name: place.addr,
+      lat: place.lat,
+      lon: place.lon,
+    };
+    //도착지로 설정하는 경우 현재 위치를 출발지로 자동 설정
+    const newOrigin = {
+      name: curAddr.addr,
+      lat: curAddr.lat,
+      lon: curAddr.lon,
+    };
+
+    setRouteInfo({
+      origin: [newOrigin],
+      dest: [newDest],
+    });
+
     navigate('/search/routes');
-    console.log("경로 출발지: ", test.start); //test용
-    console.log("경로 목적지: ", test.end); //test용
   };
 
   return (
@@ -139,19 +175,19 @@ function PlaceInfo() {
       <Row id="address_weather">
         <Box>
           <Address>
-            <FontAwesomeIcon icon={faLocationDot} style={{color: "#216CFF"}}/> 
-            {place}
+            <FontAwesomeIcon icon={faLocationDot} style={{color: "#216CFF", marginRight: "8px" }}/> 
+            {place.addr}
           </Address>
           <AddressBox>
             <Info>
               <span style={{ color: "#5f5f5f" }}>
-                {place} ({depth3}) 최신버전
+                도로명: {place.roadAddr}
               </span>
             </Info>
           </AddressBox>
           <AddressBox>
-            <Btn onClick={onStartClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>
-            <Btn onClick={onEndClick}><span style={{ color: "#216CFF"}}>도착</span></Btn>
+            <Btn onClick={onOriginClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>
+            <Btn onClick={onDestClick}><span style={{ color: "#216CFF"}}>도착</span></Btn>
           </AddressBox>
         </Box>
         <IconBox>

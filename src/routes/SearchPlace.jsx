@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState, searchPlace } from '../components/atoms';
+import { searchPlace, navState, routeInfoState } from '../components/atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationCrosshairs, faSpinner, faX } from "@fortawesome/free-solid-svg-icons";
+import { faLocationCrosshairs, faSpinner, faX, faLocationDot, faMagnifyingGlassArrowRight, faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 
-import SearchBox from '../components/SearchBox';
 import Map2 from '../components/Map2';
-import PlaceInfo from '../components/PlaceInfo';
-import { useNavigate } from 'react-router-dom';
-import Test from '../components/test';
 
 const MapWrapper = styled.div`
   height: 55%;
@@ -91,6 +89,89 @@ const Input = styled.input`
   }
 `;
 
+/* 하단창 */
+
+const Container = styled(motion.div)`
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-weight: 600;
+  padding: 12px;
+  padding-top: 6px;
+  height: 100%;
+  width: 100%;
+  display: block;
+  justify-content: start;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const Box = styled.div`
+  border-radius: 22px;
+  width: 80%;
+  margin: 20px;
+  padding: 12px;;
+`;
+
+const MarkerIconBox = styled(Box)`
+  width: 20%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+`;
+
+const Row = styled.div`
+  display: flex;
+  &:first-child {
+    justify-content: space-between;
+    background-color: white;
+    box-shadow: 0px 0px 10px 3px rgba(109, 109, 109, 0.1);
+    border-radius: 25px;
+    margin: 0px 10px;
+  }
+`;
+
+const MarkerIcon = styled(FontAwesomeIcon)`
+  width: 25px;
+  height: 25px;
+  padding: 20px;
+  background-color: #003E5E;
+  border-radius: 50%;
+  color: white;
+`;
+
+const Address = styled.div`
+  font-size: 22px;
+  font-weight: 700;
+`;
+
+
+const Info = styled.div`
+  font-size:16px;
+  margin-right: 15px;
+  width: auto;
+  margin-bottom: 10px;
+  font-weight: 500;
+`;
+
+const Btn = styled(Info)`
+  background-color: white;
+  width: auto;
+  padding: 8px 24px;
+  border-radius: 25px;
+  text-align: center;
+  border: 0.5px solid #00000039;
+  box-shadow: 0px 0px 5px 3px rgba(109, 109, 109, 0.15);
+  font-weight: 700;
+  margin-bottom: 0;
+  cursor: pointer;
+`;
+
+const AddressBox = styled.div`
+  display: flex;
+  width: auto;
+  margin-top: 15px;
+`;
+
 const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
   padding: 10px;
@@ -98,9 +179,42 @@ const Icon = styled(FontAwesomeIcon)`
 `;
 
 function SearchPlace() {
-
   const [place, setPlace] = useRecoilState(searchPlace);
+  const [routeInfo, setRouteInfo] = useRecoilState(routeInfoState);
+  const setNav = useSetRecoilState(navState);
   const navigate = useNavigate();
+
+  setNav("search");
+
+  const onOriginClick = () => {
+    const newOrigin = {
+      name: place.place_name,
+      lat: place.lat,
+      lon: place.lon,
+    };
+
+    setRouteInfo((prevState) => ({
+      ...prevState,
+      origin: [newOrigin],
+    }));
+
+    navigate('/search/routes');
+  };
+
+  const onDestClick = () => {
+    const newDest = {
+      name: place.place_name,
+      lat: place.lat,
+      lon: place.lon,
+    };
+
+    setRouteInfo((prevState) => ({
+      ...prevState,
+      dest: [newDest],
+    }));
+
+    navigate('/search/routes');
+  };
 
   return (
     <React.Fragment>
@@ -121,7 +235,42 @@ function SearchPlace() {
       <ContentBoxWrapper>
         <ToggleBar><Bar /></ToggleBar>
         {/* <PlaceInfo />  // 하단창 실험 용으로 잠시 Test로 바꿔놓음*/}
-        <Test></Test> 
+        {/* <Test></Test>  */}
+        <Container 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 20, opacity: 0 }}
+          transition={{ duration: 1 }}
+        >
+        <Row id="address_weather">
+          <Box>
+            <Address>
+            <FontAwesomeIcon icon={faMapLocationDot} style={{color: "#003E5E", marginRight: "8px" }}/> 
+            {place.place_name}
+            </Address>
+            <AddressBox>
+            <Info>
+              <span style={{ color: "#5f5f5f" }}>
+                장소명: {place.place_name} <br/>
+                카테고리: {place?.category_group_name} <br/>
+                지번: {place.address_name} <br/>
+                도로명: {place.road_address_name} <br/>
+                전화번호: {place?.phone} <br/>
+                위도: {place.lat} <br/>
+                경도: {place.lon}
+              </span>
+            </Info>
+            </AddressBox>
+            <AddressBox>
+            <Btn onClick={onOriginClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>
+            <Btn onClick={onDestClick}><span style={{ color: "#216CFF"}}>도착</span></Btn>
+            </AddressBox>
+          </Box>
+          <MarkerIconBox>
+          <MarkerIcon MarkerIcon={faMagnifyingGlassArrowRight}/>
+          </MarkerIconBox>
+        </Row> 
+        </Container>
       </ContentBoxWrapper>
     </React.Fragment>
   );

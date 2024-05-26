@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { searchPlace } from "../components/atoms";
+import { searchPlace, navState } from "../components/atoms";
 
 import styled from "styled-components";
 import { motion } from "framer-motion";
@@ -126,6 +126,9 @@ function Search() {
   
   const setSearchPlace = useSetRecoilState(searchPlace); // 선택한 장소명 atom으로 관리
   const searchPlaceValue = useRecoilValue(searchPlace);
+
+  const setNav = useSetRecoilState(navState);
+  setNav("search");
   
   const navigate = useNavigate();
   // Kakao Maps API를 이용한 검색 함수

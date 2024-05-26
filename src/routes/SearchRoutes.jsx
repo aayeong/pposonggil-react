@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 
-import { routeInfoState } from "../components/atoms";
+import { routeInfoState, navState } from "../components/atoms";
 import axios from "axios";
 
 const { kakao } = window;
@@ -120,6 +120,9 @@ function SearchRoutes() {
   const resetRouteInfo = useResetRecoilState(routeInfoState);
   const navigate = useNavigate();
 
+  const setNav = useSetRecoilState(navState);
+  setNav("search");
+
   const [serverResponse, setServerResponse] = useState(null); //서버 응답 저장용
 
   // 서버에 출발지 목적지 위도 경도 데이터 전송
@@ -127,7 +130,7 @@ function SearchRoutes() {
     try {
       const response = await axios.post("YOUR_SERVER_URL/api/route", {
         origin: {
-          lat: route.origin[0].lat,
+          lat: route.origin.lat,
           lon: route.origin[0].lon,
         },
         dest: {

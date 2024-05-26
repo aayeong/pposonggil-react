@@ -9,13 +9,16 @@ export const mapCenterState = atom({
   }
 })
 
-// 클릭 위치 주소 정보 (도로명 주소 있는 곳만 클릭 가능하게 해놔서 도로명 주소 저장)
+// 마크업 주소 정보 (도로명 주소 있는 곳만 클릭 가능하게 해놔서 도로명 주소 저장)
 export const addressState = atom({
   key: "clickedAddress",
   default: { 
-    depth2: "", //구
-    depth3: "", //동
-    roadAddressName: "", //도로명 주소
+    depth2: "", // 구
+    depth3: "", // 동
+    addr: "", // 지번
+    roadAddr: "", // 도로명
+    lat: "", // 위도
+    lon: "", // 경도
   }
 });
 
@@ -23,12 +26,12 @@ export const addressState = atom({
 export const currentAddressState = atom({
   key: "currentAddress",
   default: { 
-    depth2: "", //구
-    depth3: "", //동
-    addr: "", //지번 주소(도로명 없는 경우도 있어서 지번으로)
-    roadAddr: "",
-    lat: "",
-    lon: "",
+    depth2: "", // 구
+    depth3: "", // 동
+    addr: "", // 지번
+    roadAddr: "", // 도로명
+    lat: "", // 위도
+    lon: "", // 경도
   }
 })
 
