@@ -13,7 +13,7 @@ import Header from './layouts/Header';
 import Navigation from './layouts/Navigation';
 
 import Map2 from './components/Map2';
-
+import MyPage from './routes/MyPage';
 
 const Wrapper = styled.div`
   top: 70px;
@@ -33,6 +33,7 @@ function App() {
           <Route path="/search/routes" element={<SearchRoutes />} />
           <Route path="/search/place" element={<SearchPlace />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/mypage" element={<MyPage/>} />
           <Route path="/market" element={<Market />} />
           <Route path="/home" element={<Home />} />
 

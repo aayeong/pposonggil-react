@@ -116,6 +116,8 @@ const InfoItem = styled.span`
   }
 `;
 
+/////////////////////////////////////////////////////////////////////////////////////
+
 function Search() {
   const [inputText, setInputText] = useState(""); // 검색 입력 텍스트
   const [searchResults, setSearchResults] = useState([]); // 검색 결과(자동완성 기능)

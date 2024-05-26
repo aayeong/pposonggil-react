@@ -138,8 +138,8 @@ function Test() {
 
   // const onDestClick = () => {
   //   // setRouteInfo({ start: currentAddress.addressName, end: place });
-  //   const updateDestination = () => {
-  //     const newDestination = {
+  //   const updateDest = () => {
+  //     const newDest = {
   //       name: place.place_name,
   //       lat: place.lat,
   //       lon: place.lon,
@@ -147,7 +147,7 @@ function Test() {
   
   //     setRouteInfo((prevState) => ({
   //       ...prevState,
-  //       destination: [newDestination],
+  //       dest: [newDest],
   //     }));
   //   navigate('/search/routes');
 
@@ -170,7 +170,7 @@ function Test() {
   };
 
   const onDestClick = () => {
-    const newDestination = {
+    const newDest = {
       name: place.place_name,
       lat: place.lat,
       lon: place.lon,
@@ -178,7 +178,7 @@ function Test() {
 
     setRouteInfo((prevState) => ({
       ...prevState,
-      destination: [newDestination],
+      dest: [newDest],
     }));
 
     navigate('/search/routes');

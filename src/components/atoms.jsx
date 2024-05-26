@@ -127,12 +127,12 @@ export const routeInfoState = atom({
   key: 'routeInfo',
   default: {
     origin: [{ 
-      name: '출발 장소명', 
+      name: '', 
       lat: '', 
       lon: '',
     }],
-    destination: [{ 
-      name: '도착 장소명', 
+    dest: [{ 
+      name: '', 
       lat: '', 
       lon: '',
     }]
