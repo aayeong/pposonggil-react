@@ -6,8 +6,8 @@ import Map from "../components/Map";
 import SearchBox from "../components/SearchBox";
 import Weather from "../components/Weather";
 import PlaceInfo from "../components/PlaceInfo";
-import { useRecoilState } from "recoil";
-import { gridState, locationBtnState, markerState } from "../components/atoms";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import { gridState, locationBtnState, markerState, navState, routeInfoState } from "../components/atoms";
 
 const ContentBox = styled(motion.div)`
   overflow-x: hidden;
@@ -53,6 +53,12 @@ function Home() {
   const contentBoxRef = useRef(null);
 
   const [marker, setMarker] = useRecoilState(markerState);
+  const [nav, setNav] = useRecoilState(navState);
+  const resetRouteInfo = useResetRecoilState(routeInfoState);
+  const resetNav = useResetRecoilState(navState);
+  
+  resetRouteInfo(); //이전 출발지/목적지 디폴트 값으로 초기화
+  resetNav(); //네비게이션 바 위치 디폴트 값으로 초기화
 
   const changeHeight = useCallback(() => {
     setSlideUp(prev => !prev);

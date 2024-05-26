@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { addressState, currentAddressState, locationBtnState, routeInfo } from "./atoms";
+import { addressState, currentAddressState, locationBtnState, routeInfoState, searchPlace } from "./atoms";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import styled from "styled-components";
@@ -90,43 +90,98 @@ const AddressBox = styled.div`
   margin-top: 15px;
 `;
 
-function PlaceInfo() {
+function Test() {
   const [activeLoc, setActiveLoc] = useState(true);
 
   const address = useRecoilValue(addressState);
-  const [place, setPlace] = useState(""); //마크업된 장소
+  // const [place, setPlace] = useState(""); //마크업된 장소
   const [depth3, setDepth3] = useState("");
 
-  const setRouteInfo = useSetRecoilState(routeInfo);
   const currentAddress = useRecoilValue(currentAddressState);
   const locationBtn = useRecoilValue(locationBtnState); 
-  const test = useRecoilValue(routeInfo);
+  // const test = useRecoilValue(routeInfo);
 
+  // 수정내용
   const navigate = useNavigate();
 
+  const place = useRecoilValue(searchPlace);
+  const [routeInfo, setRouteInfo] = useRecoilState(routeInfoState);
 
-  useEffect(() => {
-    if(locationBtn) {
-      setPlace(currentAddress.addressName);
-      setDepth3(currentAddress.depth3);
-    } else {
-    setPlace(address.roadAddressName);
-    setDepth3(address.depth3);
-    }
-  }, [address, locationBtn]);
 
-  const onStartClick = () => {
-    // setRouteInfo({ start: place, end: "" });
+  // useEffect(() => {
+  //   if(locationBtn) {
+  //     setPlace(currentAddress.addressName);
+  //     setDepth3(currentAddress.depth3);
+  //   } else {
+  //   setPlace(address.roadAddressName);
+  //   setDepth3(address.depth3);
+  //   }
+  // }, [address, locationBtn]);
+
+  // const onOriginClick = () => {
+  //   // setRouteInfo({ start: place, end: "" });
+  //   navigate('/search/routes');
+
+  //   const updateOrigin = () => {
+  //     const newOrigin = {
+  //       name: place.place_name,
+  //       lat: place.lat,
+  //       lon: place.lon,
+  //     };
+  
+  //     setRouteInfo((prevState) => ({
+  //       ...prevState,
+  //       origin: [newOrigin],
+  //     }));
+  //   };
+  // };
+
+  // const onDestClick = () => {
+  //   // setRouteInfo({ start: currentAddress.addressName, end: place });
+  //   const updateDestination = () => {
+  //     const newDestination = {
+  //       name: place.place_name,
+  //       lat: place.lat,
+  //       lon: place.lon,
+  //     };
+  
+  //     setRouteInfo((prevState) => ({
+  //       ...prevState,
+  //       destination: [newDestination],
+  //     }));
+  //   navigate('/search/routes');
+
+  //   };
+  // };
+
+  const onOriginClick = () => {
+    const newOrigin = {
+      name: place.place_name,
+      lat: place.lat,
+      lon: place.lon,
+    };
+
+    setRouteInfo((prevState) => ({
+      ...prevState,
+      origin: [newOrigin],
+    }));
+
     navigate('/search/routes');
-    console.log("경로 출발지: ", test.start); //test용
-    console.log("경로 목적지: ", test.end); //test용
   };
 
-  const onEndClick = () => {
-    // setRouteInfo({ start: currentAddress.addressName, end: place });
+  const onDestClick = () => {
+    const newDestination = {
+      name: place.place_name,
+      lat: place.lat,
+      lon: place.lon,
+    };
+
+    setRouteInfo((prevState) => ({
+      ...prevState,
+      destination: [newDestination],
+    }));
+
     navigate('/search/routes');
-    console.log("경로 출발지: ", test.start); //test용
-    console.log("경로 목적지: ", test.end); //test용
   };
 
   return (
@@ -140,18 +195,25 @@ function PlaceInfo() {
         <Box>
           <Address>
             <FontAwesomeIcon icon={faLocationDot} style={{color: "#216CFF"}}/> 
-            {place}
+            {place.place_name}
           </Address>
           <AddressBox>
             <Info>
               <span style={{ color: "#5f5f5f" }}>
-                {place} ({depth3}) 최신버전
+                장소명: {place.place_name} <br/>
+                카테고리: {place?.category_group_name} <br/>
+                지번: {place.address_name} <br/>
+                도로명: {place.road_address_name} <br/>
+                전화번호: {place?.phone} <br/>
+                위도: {place.lat} <br/>
+                경도: {place.lon}
               </span>
             </Info>
           </AddressBox>
+
           <AddressBox>
-            <Btn onClick={onStartClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>
-            <Btn onClick={onEndClick}><span style={{ color: "#216CFF"}}>도착</span></Btn>
+            <Btn onClick={onOriginClick}><span style={{ color: "#02C73C" }}>출발</span></Btn>
+            <Btn onClick={onDestClick}><span style={{ color: "#216CFF"}}>도착</span></Btn>
           </AddressBox>
         </Box>
         <IconBox>
@@ -162,4 +224,4 @@ function PlaceInfo() {
    );
   }
 
-  export default PlaceInfo
+  export default Test;

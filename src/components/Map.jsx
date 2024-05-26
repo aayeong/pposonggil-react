@@ -90,7 +90,7 @@ function Map() {
     setActiveMarker();
     setActiveTracking();
     setActiveGrid();
-
+    
     const script = document.createElement('script');
     script.async = true;
     script.src = "//dapi.kakao.com/v2/maps/sdk.js?appkey=fa3cd41b575ec5e015970670e786ea86&autoload=false";
@@ -170,6 +170,7 @@ function Map() {
   const searchAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
   }, []);
+
   // 좌표로 상세 주소 검색
   const searchDetailAddrFromCoords = useCallback((coords, callback) => {
     geocoder.current.coord2Address(coords.getLng(), coords.getLat(), callback);

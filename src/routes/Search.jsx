@@ -37,7 +37,7 @@ const Container = styled.div`
   margin: 0px 20px;
 `;
 
-const Input = styled(motion.input)`
+const Input = styled.input`
   text-align: left;
   width: 100%;
   height: 45px;
@@ -165,11 +165,10 @@ function Search() {
 
   // 검색 결과 클릭 시 장소명 로컬스토리지에 저장 및 searchPlace atom 값 업데이트
   const handleResultClick = (result, index) => {
-    // 선택한 장소명 로컬스토리지에 저장
+    // 선택한 장소 로컬스토리지에 저장(상세 정보까지 전부 다)
     const newHistory = [result, ...searchHistory.filter(item => item !== result)];
     setSearchHistory(newHistory);
     localStorage.setItem("searchHistory", JSON.stringify(newHistory));
-
     // 선택 장소명에 해당하는 상세 정보 atom에 저장
     setSearchPlace({
       place_name: result.place_name || result,
@@ -177,8 +176,8 @@ function Search() {
       address_name: result.address_name,
       road_address_name: result.road_address_name,
       phone: result.phone,
-      x: result.x,
-      y: result.y,
+      lat: result.y,
+      lon: result.x,
     });
     console.log("atom :", searchPlaceValue); //테스트용
     navigate(`/search/place`);

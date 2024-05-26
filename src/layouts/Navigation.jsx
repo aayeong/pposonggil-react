@@ -2,15 +2,15 @@ import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faCloud, faUmbrella, faBookmark, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faCloud, faUmbrella, faBookmark, faUser, faRoute } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
 import { navState } from "../components/atoms";
-import { Link } from 'react-router-dom'; // Link 추가
+import { Link } from 'react-router-dom';
 
 const Nav = styled.div`
   outline: none;
   display: flex;
-  flex-direction: column; /* Arrange vertically */
+  flex-direction: column;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -46,7 +46,7 @@ const Item = styled(motion.li)`
 
 const NavIcon = styled(motion.div)`
   font-size: 25px;
-  color: ${(props) => (props.isActive ? "#003E5E" : "#4a4a4a")}; /* Change color when active */
+  color: ${(props) => (props.isActive ? "#003E5E" : "#4a4a4a")};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +76,7 @@ function Navigation() {
 
   const items = [
     { nav: "home", to: "/", icon: faHouse },
-    { nav: "weather", to: "/search", icon: faCloud },
+    { nav: "search", to: "/search", icon: faRoute },
     { nav: "market", to: "/market", icon: faUmbrella },
     { nav: "bookmark", to: "/bookmark", icon: faBookmark },
     { nav: "mypage", to: "/mypage", icon: faUser },
@@ -91,7 +91,7 @@ function Navigation() {
       <Items>
         {items.map((item, index) => (
           <Item key={item.nav}>
-              <Link to={item.to} style={{ textDecoration: 'none' }}>
+              <Link to={item.to} style={{ textDecoration: 'none', width: "100%", height: "100%" }}>
                 <NavIcon
                   whileTap={{ scale: 0.85 }}
                   onClick={() => onClick(index)}

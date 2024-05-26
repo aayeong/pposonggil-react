@@ -323,6 +323,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const { kakao } = window;
 
@@ -474,6 +475,8 @@ function SearchRoute() {
   const [isSearchingStart, setIsSearchingStart] = useState(true);
   const [shouldSearch, setShouldSearch] = useState(true);
 
+  const navigate = useNavigate();
+
   const handleReverseBtn = useCallback(() => {
     setStartInputText(endInputText);
     setEndInputText(startInputText);
@@ -546,8 +549,9 @@ function SearchRoute() {
           <Input
             type="text"
             value={startInputText}
-            onChange={handleStartInputChange}
-            placeholder="출발지 입력"
+            // onChange={handleStartInputChange}
+            placeholder="출발지 검색"
+            onClick={()=> navigate('/search')}
           />
         </Container>
         <Container>
@@ -560,8 +564,9 @@ function SearchRoute() {
           <Input
             type="text"
             value={endInputText}
-            onChange={handleEndInputChange}
-            placeholder="도착지 입력"
+            // onChange={handleEndInputChange}
+            readOnly
+            placeholder="도착지 검색"
           />
         </Container>
         <Container>

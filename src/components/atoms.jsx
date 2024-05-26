@@ -25,7 +25,10 @@ export const currentAddressState = atom({
   default: { 
     depth2: "", //구
     depth3: "", //동
-    addressName: "", //지번 주소(도로명 없는 경우도 있어서 지번으로)
+    addr: "", //지번 주소(도로명 없는 경우도 있어서 지번으로)
+    roadAddr: "",
+    lat: "",
+    lon: "",
   }
 })
 
@@ -54,16 +57,10 @@ export const navState = atom({
 })
 
 //경로의 출발지 도착지 저장 atom
-export const routeInfo = atom({
-  key: "routeInfo",
-  default: {
-    start: "",
-    end: "",
-  }
-})
+
 
 //검색 장소 정보 저장 atom
-// 위경도는 카카오맵 기준 좌표값임
+// 위경도 필수!!
 export const searchPlace = atom({
   key: "searchPlace",
   default: {
@@ -72,7 +69,72 @@ export const searchPlace = atom({
     address_name: "",
     road_address_name: "",
     phone: "",
-    x: "",
-    y: "",
+    lat: "",
+    lon: "",
   }
 })
+
+// 마커에 해당하는 장소, 위치, 상세정보, 위도, 경도 값 저장 atom
+export const markLocInfo = atom({
+  key: "searchLoc",
+  default: {
+    place_name: "",
+    category_group_name: "",
+    address_name: "",
+    road_address_name: "",
+    phone: "",
+    lat: "",
+    lon: "",
+  }
+})
+// 현재 위치에 해당하는 장소, 위치, 상세정보, 위도, 경도 값 저장 atom
+export const myLocInfo = atom({
+  key: "myLoc",
+  default: {
+    place_name: "",
+    category_group_name: "",
+    address_name: "",
+    road_address_name: "",
+    phone: "",
+    lat: "",
+    lon: "",
+    depth2: "",
+    depth3: "",
+  }
+})
+
+
+//경로의 출발지 도착지 저장 atom
+export const routeInfo = atom({
+  key: 'routeInfo',
+  default: {
+    origin: [{ 
+      name: '숭실대학교 정보과학관', 
+      lat: '', 
+      lon: '',
+     }],
+    destination: [{ 
+      name: '', 
+      lat: '', 
+      lon: '',
+    }]
+  }
+});
+
+
+//Map2 experimental atom
+export const routeInfoState = atom({
+  key: 'routeInfo',
+  default: {
+    origin: [{ 
+      name: '출발 장소명', 
+      lat: '', 
+      lon: '',
+    }],
+    destination: [{ 
+      name: '도착 장소명', 
+      lat: '', 
+      lon: '',
+    }]
+  }
+});

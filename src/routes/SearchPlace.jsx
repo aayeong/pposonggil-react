@@ -11,6 +11,7 @@ import SearchBox from '../components/SearchBox';
 import Map2 from '../components/Map2';
 import PlaceInfo from '../components/PlaceInfo';
 import { useNavigate } from 'react-router-dom';
+import Test from '../components/test';
 
 const MapWrapper = styled.div`
   height: 55%;
@@ -74,7 +75,7 @@ const SearchBoxWrapper = styled.div`
   z-index: 200;
 `;
 
-const Input = styled(motion.input)`
+const Input = styled.input`
   text-align: left;
   width: 90%;
   height: 45px;
@@ -109,6 +110,8 @@ function SearchPlace() {
           value={place.place_name} 
           placeholder="장소 주소 검색"
           onClick={()=>navigate("/search")}
+          readOnly
+
         />
         <Icon icon={faX} onClick={()=>navigate("/")}></Icon>
       </SearchBoxWrapper>
@@ -117,7 +120,8 @@ function SearchPlace() {
       </MapWrapper>
       <ContentBoxWrapper>
         <ToggleBar><Bar /></ToggleBar>
-        <PlaceInfo />
+        {/* <PlaceInfo />  // 하단창 실험 용으로 잠시 Test로 바꿔놓음*/}
+        <Test></Test> 
       </ContentBoxWrapper>
     </React.Fragment>
   );
