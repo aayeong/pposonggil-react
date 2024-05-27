@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addressState, currentAddressState } from "./atoms";
+import { addressState, currentAddressState } from "../recoil/atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 import styled from "styled-components";

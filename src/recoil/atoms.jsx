@@ -77,52 +77,23 @@ export const searchPlace = atom({
   }
 })
 
-// 마커에 해당하는 장소, 위치, 상세정보, 위도, 경도 값 저장 atom
-export const markLocInfo = atom({
-  key: "searchLoc",
-  default: {
-    place_name: "",
-    category_group_name: "",
-    address_name: "",
-    road_address_name: "",
-    phone: "",
-    lat: "",
-    lon: "",
-  }
-})
-// 현재 위치에 해당하는 장소, 위치, 상세정보, 위도, 경도 값 저장 atom
-export const myLocInfo = atom({
-  key: "myLoc",
-  default: {
-    place_name: "",
-    category_group_name: "",
-    address_name: "",
-    road_address_name: "",
-    phone: "",
-    lat: "",
-    lon: "",
-    depth2: "",
-    depth3: "",
-  }
-})
-
 
 //경로의 출발지 도착지 저장 atom
-export const routeInfo = atom({
-  key: 'routeInfo',
-  default: {
-    origin: [{ 
-      name: '숭실대학교 정보과학관', 
-      lat: '', 
-      lon: '',
-     }],
-    destination: [{ 
-      name: '', 
-      lat: '', 
-      lon: '',
-    }]
-  }
-});
+// export const routeInfo = atom({
+//   key: 'routeInfo',
+//   default: {
+//     origin: [{ 
+//       name: '숭실대학교 정보과학관', 
+//       lat: '', 
+//       lon: '',
+//      }],
+//     destination: [{ 
+//       name: '', 
+//       lat: '', 
+//       lon: '',
+//     }]
+//   }
+// });
 
 
 //Map2 experimental atom
@@ -140,4 +111,10 @@ export const routeInfoState = atom({
       lon: '',
     }]
   }
+});
+
+//서버에서 받아온 사용자 정보 저장 atom
+export const userState = atom({
+  key: 'userState',
+  default: null,
 });

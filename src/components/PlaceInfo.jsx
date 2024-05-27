@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { addressState, currentAddressState, locationBtnState, routeInfoState } from "./atoms";
+import { addressState, currentAddressState, locationBtnState, routeInfoState } from "../recoil/atoms";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import styled from "styled-components";

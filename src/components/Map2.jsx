@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {useRecoilValue } from 'recoil';
-import { searchPlace } from './atoms';
+import { searchPlace } from '../recoil/atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';

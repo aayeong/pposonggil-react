@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { addressState, locationBtnState, mapCenterState, markerState } from "./atoms";
+import { addressState, locationBtnState, mapCenterState, markerState } from "../recoil/atoms";
 
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";

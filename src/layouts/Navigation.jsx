@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faCloud, faUmbrella, faBookmark, faUser, faRoute } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilState } from "recoil";
-import { navState } from "../components/atoms";
+import { navState } from "../recoil/atoms";
 import { Link } from 'react-router-dom';
 
 const Nav = styled.div`

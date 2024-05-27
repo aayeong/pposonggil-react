@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState } from './atoms';
+import { addressState, currentAddressState, gridState, locationBtnState, mapCenterState, markerState } from '../recoil/atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';

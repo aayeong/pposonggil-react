@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { searchPlace, navState, routeInfoState } from '../components/atoms';
+import { searchPlace, navState, routeInfoState } from '../recoil/atoms';
 
 import styled from "styled-components";
 import { motion } from 'framer-motion';

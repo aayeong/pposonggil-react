@@ -6,7 +6,7 @@ import { faRotate, faEllipsisVertical, faClockRotateLeft } from "@fortawesome/fr
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 
-import { routeInfoState, navState } from "../components/atoms";
+import { routeInfoState, navState } from "../recoil/atoms";
 import axios from "axios";
 
 const { kakao } = window;

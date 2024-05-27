@@ -7,7 +7,7 @@ import SearchBox from "../components/SearchBox";
 import Weather from "../components/Weather";
 import PlaceInfo from "../components/PlaceInfo";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
-import { gridState, locationBtnState, markerState, navState, routeInfoState } from "../components/atoms";
+import { gridState, locationBtnState, markerState, navState, routeInfoState } from "../recoil/atoms";
 
 const ContentBox = styled(motion.div)`
   overflow-x: hidden;
