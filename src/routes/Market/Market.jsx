@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import '../styles/MarketHome.css';
+import { faPen  } from '@fortawesome/free-solid-svg-icons';
+
+//여기에 해당 화면에 사용한 css 파일 import 해주기
+import '../../styles/MarketHome.css';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -15,6 +17,7 @@ const Wrapper = styled.div`
 `;
 
 function Market() {
+  // 여기가 .js에 쓴 내용을 chat-gpt로 다듬어서 여기에 붙여넣기!
   useEffect(() => {
     // 로컬 스토리지에서 post 불러오기
     const renderPosts = () => {
@@ -44,11 +47,14 @@ function Market() {
     renderPosts();
   }, []);
 
+  // html에서 긁어온 코드는 return 문 안으로 넣어주면 돼욧
   return (
     <React.Fragment>
       <Wrapper>
+        {/* 긁어온 코드는 꼭 <Wrapper>안에 위치하게 해주세용 */}
+        {/* html에 있는 <a>태그는 사용 불가해서  <Link></Link>태그로 바꿔주면 됩니당*/}
         <div className="write-button">
-        <Link className="screen-header__menu-link" href="/secondhand/write.html">
+        <Link className="screen-header__menu-link" to='/market/write'>
           <button>
             게시글 작성 <FontAwesomeIcon icon={faPen} />
           </button>
@@ -57,9 +63,11 @@ function Market() {
         <div className="post-list" id="postList">
           {/* 게시글 목록이 여기에 렌더링됩니다. */}
         </div>
+        {/* */}
       </Wrapper>
     </React.Fragment>
   )
 }
 
+// 무조건 함수명으로 해주세요
 export default Market
