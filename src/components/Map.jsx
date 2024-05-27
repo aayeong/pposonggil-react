@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationCrosshairs, faSpinner, faBorderAll , faCloudShowersHeavy, faL} from "@fortawesome/free-solid-svg-icons";
 
 import SearchBox from './SearchBox';
+import { createGrid } from '../js/gridHelper';
 
 const { kakao } = window;
 
@@ -72,7 +73,8 @@ const KakaoMap = styled.div`
 function Map() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGridLoading, setIsGridLoading] = useState(false);
-  const [activeGrid, setActiveGrid] = useState(false);
+  const [activeGrid, setActiveGrid] = useState(false); //격자 버튼
+  const [gridLines, setGridLines] = useState([]); //격자 
 
   const [address, setAddress] = useRecoilState(addressState); //마크업 및 지도 이동 시 지도 중심 위치 주소 (temp주소)
   const [currentAddress, setCurrentAddress] = useRecoilState(currentAddressState); // 현재 위치 추적 주소
@@ -391,8 +393,12 @@ function Map() {
     mapInstance.current.setLevel(8);
     
     if(!activeGrid) {
+      const newGridLines = createGrid(mapInstance.current, kakao);
+      setGridLines(newGridLines);
       console.log("show grid!");
     } else {
+      gridLines.forEach(line => line.setMap(null));
+      setGridLines([]);
       console.log("hide grid!");
     }
     setActiveGrid(prev=> !prev);
